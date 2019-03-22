@@ -1,0 +1,54 @@
+<view class="wrap page06">
+	<view class="list">
+		<navigator class="item" url="">
+			<image src="/images/face.png" class="face" mode="widthFix"></image>
+			<view class="r">
+      <!-- r类名 -->
+				<view class="txt1">ZYue航</view>
+				<view class="txt2">一生温暖纯良</view>
+			</view>
+		</navigator>
+		<navigator class="item" url="">
+			<image src="/images/face.png" class="face" mode="widthFix"></image>
+			<view class="r">
+				<view class="txt1">ZYue航</view>
+				<view class="txt2">一生温暖纯良</view>
+			</view>
+		</navigator>
+		<navigator class="item" url="">
+			<image src="/images/face.png" class="face" mode="widthFix"></image>
+			<view class="r">
+				<view class="txt1">ZYue航</view>
+				<view class="txt2">一生温暖纯良</view>
+			</view>
+		</navigator>
+		<navigator class="item" url="">
+			<image src="/images/face.png" class="face" mode="widthFix"></image>
+			<view class="r">
+				<view class="txt1">ZYue航</view>
+				<view class="txt2">一生温暖纯良</view>
+			</view>
+		</navigator>
+		<navigator class="item" url="">
+			<image src="/images/face.png" class="face" mode="widthFix"></image>
+			<view class="r">
+				<view class="txt1">ZYue航</view>
+				<view class="txt2">一生温暖纯良</view>
+			</view>
+		</navigator>
+		<navigator class="item" url="">
+			<image src="/images/face.png" class="face" mode="widthFix"></image>
+			<view class="r">
+				<view class="txt1">ZYue航</view>
+				<view class="txt2">一生温暖纯良</view>
+			</view>
+		</navigator>
+		<navigator class="item" url="">
+			<image src="/images/face.png" class="face" mode="widthFix"></image>
+			<view class="r">
+				<view class="txt1">ZYue航</view>
+				<view class="txt2">一生温暖纯良</view>
+			</view>
+		</navigator>
+	</view>
+</view>

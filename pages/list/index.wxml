@@ -1,0 +1,9 @@
+<view class="page-list">
+	<view class="list-item"><navigator url="/pages/page01/index">01-首页（发现、关注、话题）</navigator></view>
+	<view class="list-item"><navigator url="/pages/page02/index">02-发布动态</navigator></view>
+	<view class="list-item"><navigator url="/pages/page03/index">03-我的</navigator></view>
+	<view class="list-item"><navigator url="/pages/page04/index">04-动态页</navigator></view>
+	<view class="list-item"><navigator url="/pages/page05/index">05-动态详情</navigator></view>
+	<view class="list-item"><navigator url="/pages/page06/index">06-我的关注</navigator></view>
+	<view class="list-item"><navigator url="/pages/page07/index">07-他的主页</navigator></view>
+</view>

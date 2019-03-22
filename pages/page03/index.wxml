@@ -1,0 +1,36 @@
+<view class="wrap page03">
+	<view class="user-panel">
+		<image src="/images/face.png" class="faceImg" mode="widthFix"></image>
+			<view class="right">
+				<view class="txt1">ZYue航</view>
+				<view class="txt2">Life's a struggle.</view>
+				<view class="txt3">武汉大学</view>
+			</view>
+		</view>
+	<view class="info">
+		<view class="item">
+			<view class="txt1">动态</view>
+			<view class="txt2">23</view>
+		</view>
+    <!-- 位置/间隔怎么确定的？ -->
+		<view class="item">
+			<view class="txt1">关注</view>
+			<view class="txt2">114</view>
+		</view>
+		<view class="item">
+			<view class="txt1">粉丝</view>
+			<view class="txt2">98</view>
+		</view>
+	</view>
+	<view class="list">
+		<view class="item">
+			<navigator class="arrow" url="">我的名片</navigator>
+		</view>
+		<view class="item">
+			<navigator class="arrow" url="">我的收藏</navigator>
+		</view>
+		<view class="item">
+			<navigator class="arrow" url="">联系我们</navigator>
+		</view>
+	</view>
+</view>

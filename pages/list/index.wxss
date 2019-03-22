@@ -1,0 +1,3 @@
+.page-list{width: 100%;padding-left:20rpx;font-size: 26rpx;padding:20rpx 50rpx;border-top:1px solid #ccc;}
+.list-item{line-height: 50rpx;}
+.title{text-align:center;font-size:36rpx;line-height:80rpx;}

@@ -1,0 +1,162 @@
+<view class="wrap page04">
+
+			<view class="g-cardItem">
+				<view class="userInfo">
+					<image src="/images/face.png" class="face" mode="widthFix"></image>
+					<view class="r">
+						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
+						<view class="txt2">1个小时前</view>
+					</view>
+				</view>
+				<view class="article">
+					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
+					<view>I wanna quit.</view>
+				</view>
+				<view class="audio-box">
+					<image src="/images/img.png" class="img" mode="widthFix"></image>
+					<view class="play-operate">
+						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
+							<block wx:if="{{onePlay}}">
+								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
+							</block>
+							<block wx:else>
+								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
+							</block>
+						</button>
+						<view class="time">29'</view>
+					</view>
+				</view>
+				<view class="btm-operate">
+					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
+					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
+				</view>
+			</view>
+
+			<view class="g-cardItem">
+				<view class="userInfo">
+					<image src="/images/face.png" class="face" mode="widthFix"></image>
+					<view class="r">
+						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
+						<view class="txt2">1个小时前</view>
+					</view>
+				</view>
+				<view class="article">
+					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
+					<view>I wanna quit.</view>
+				</view>
+				<view class="audio-box">
+					<image src="/images/img.png" class="img" mode="widthFix"></image>
+					<view class="play-operate">
+						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
+							<block wx:if="{{onePlay}}">
+								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
+							</block>
+							<block wx:else>
+								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
+							</block>
+						</button>
+						<view class="time">29'</view>
+					</view>
+				</view>
+				<view class="btm-operate">
+					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
+					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
+				</view>
+			</view>
+
+			<view class="g-cardItem">
+				<view class="userInfo">
+					<image src="/images/face.png" class="face" mode="widthFix"></image>
+					<view class="r">
+						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
+						<view class="txt2">1个小时前</view>
+					</view>
+				</view>
+				<view class="article">
+					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
+					<view>I wanna quit.</view>
+				</view>
+				<view class="audio-box">
+					<image src="/images/img.png" class="img" mode="widthFix"></image>
+					<view class="play-operate">
+						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
+							<block wx:if="{{onePlay}}">
+								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
+							</block>
+							<block wx:else>
+								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
+							</block>
+						</button>
+						<view class="time">29'</view>
+					</view>
+				</view>
+				<view class="btm-operate">
+					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
+					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
+				</view>
+			</view>
+
+			<view class="g-cardItem">
+				<view class="userInfo">
+					<image src="/images/face.png" class="face" mode="widthFix"></image>
+					<view class="r">
+						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
+						<view class="txt2">1个小时前</view>
+					</view>
+				</view>
+				<view class="article">
+					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
+					<view>I wanna quit.</view>
+				</view>
+				<view class="audio-box">
+					<image src="/images/img.png" class="img" mode="widthFix"></image>
+					<view class="play-operate">
+						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
+							<block wx:if="{{onePlay}}">
+								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
+							</block>
+							<block wx:else>
+								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
+							</block>
+						</button>
+						<view class="time">29'</view>
+					</view>
+				</view>
+				<view class="btm-operate">
+					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
+					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
+				</view>
+			</view>
+
+			<view class="g-cardItem">
+				<view class="userInfo">
+					<image src="/images/face.png" class="face" mode="widthFix"></image>
+					<view class="r">
+						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
+						<view class="txt2">1个小时前</view>
+					</view>
+				</view>
+				<view class="article">
+					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
+					<view>I wanna quit.</view>
+				</view>
+				<view class="audio-box">
+					<image src="/images/img.png" class="img" mode="widthFix"></image>
+					<view class="play-operate">
+						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
+							<block wx:if="{{onePlay}}">
+								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
+							</block>
+							<block wx:else>
+								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
+							</block>
+						</button>
+						<view class="time">29'</view>
+					</view>
+				</view>
+				<view class="btm-operate">
+					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
+					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
+				</view>
+			</view>
+</view>

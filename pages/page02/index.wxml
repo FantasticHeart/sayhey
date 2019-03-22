@@ -1,0 +1,50 @@
+<view class="wrap page02">
+  <view class="title-box">
+    <text class="tt">Title</text>
+    <input placeholder="输入标题..." class="input" value="" bindinput="btnInputTitle" bindblur="btnBlurInput" placeholder-class="phColor" />
+    <text class="number">{{titleNumber}}/15</text>
+    <!--  -->
+    <button class="btn btn-red" bindtap="btnSubmit" hover-class="none">发布</button>
+  </view>
+  <view class="textarea-box">
+    <textarea class="textarea" value="{{textareaValue}}" placeholder="请描述你的语音..." placeholder-class="phColor" maxlength="500" auto-height bindlinechange="" bindinput="btnInputTextarea" />
+    <!-- 限制字体，换行 -->
+    <view class="tips">{{textNumber}}/200</view>
+  </view>
+  <view class="g-uploadBox">
+    <block wx:for="{{uploadFilePaths}}" wx:key="item">
+      <!-- wx:for -->
+      <view class="item">
+        <image src="{{item}}" class="img" mode="aspectFill"></image>
+        <!-- aspectFill -->
+        <button class="btn-delete" bindtap="btnDelete" data-id="{{index}}"></button>
+        <!-- Delete 照片 -->
+      </view>
+    </block>
+    <button class="item btn-upload" bindtap="btnUpload"></button>
+  </view>
+  <!--添加照片  -->
+  <view class="fixed-operate">
+    <view class="txt">点击开始录音</view>
+    <view class="operate">
+      <button class="btn-left" bindtap="" hover-class="none">取消</button>
+      <button class="btn-center" bindtap="btnVoice" hover-class="none">
+        <!-- hover-class -->
+        <block wx:if="{{voiceStatus==1}}">
+          <!-- 录音状态1 -->
+          <image src="/images/voice1.png" class="icon" mode="widthFix"></image>
+        </block>
+        <block wx:elif="{{voiceStatus==2}}">
+          <image src="/images/voice2.png" class="icon" mode="widthFix"></image>
+        </block>
+        <block wx:else>
+          <image src="/images/voice3.png" class="icon" mode="widthFix"></image>
+        </block>
+      </button>
+      <block wx:if="{{voiceStatus==3}}">
+        <button class="btn-right" bindtap="btnSendVoice" hover-class="none">{{sendOk?'已上传':'上传'}}</button>
+      </block>
+
+    </view>
+  </view>
+</view>

@@ -1,0 +1,50 @@
+{
+  "pages":[
+    "pages/page05/index",
+    "pages/page02/index",
+    "pages/page03/index",
+    "pages/page07/index",
+    "pages/page04/index",
+    "pages/page01/index",
+    "pages/page06/index",
+    "pages/list/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "white",
+    "navigationBarTitleText": "SayHey",
+    "navigationBarTextStyle":"black",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "borderStyle":"black",
+    "backgroundColor":"#fff",
+    "color":"#868696",
+    "selectedColor":"#ff4c13",
+    "list": [
+      {
+        "pagePath": "pages/page01/index",
+        "iconPath": "/images/ft1.png",
+        "selectedIconPath": "/images/ft1.png",
+        "text": ""
+      },
+      {
+        "pagePath": "pages/list/index",
+        "iconPath": "/images/ft2.png",
+        "selectedIconPath": "/images/ft2.png",
+        "text": ""
+      },
+      {
+        "pagePath": "pages/list/index",
+        "iconPath": "/images/ft3.png",
+        "selectedIconPath": "/images/ft3.png",
+        "text": ""
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "debug": false
+}
