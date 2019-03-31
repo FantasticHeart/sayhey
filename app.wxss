@@ -1,5 +1,14 @@
 @charset "UTF-8";
 /* 为方便后续配合，请尽量不要修改此文件。 QQ: 215611388 */
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
 .phColor { color: #cccccc; }
 
 .red { color: #ca2222; }

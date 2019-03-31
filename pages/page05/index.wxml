@@ -2,54 +2,47 @@
 	
 	<view class="g-cardItem">
 		<view class="userInfo">
-			<image src="/images/face.png" class="face" mode="widthFix"></image>
+			<image src="{{userData.user.avatar}}" class="face" mode="widthFix" bindtap='clickOwn'></image>
 			<view class="r">
-				<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
-				<view class="txt2">1个小时前</view>
+				<view class="txt1">{{userData.user.userName}} <text class="tag">{{userData.postTitle}}</text></view>
+				<view class="txt2">{{userData.ctime}}</view>
 			</view>
 		</view>
 		<view class="article">
-			<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
-			<view>I wanna quit.</view>
+			<view>{{userData.postContent}}</view>
 		</view>
 		<view class="audio-box">
-			<image src="/images/img.png" class="img" mode="widthFix"></image>
+			<image src="{{gIp+userData.postImg}}" class="img" mode="widthFix"></image>
 			<view class="play-operate">
-				<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
+				<button class="btn-play" bindtap="{{onePlay?'':'btnOnePlay'}}" hover-class="none">
 					<block wx:if="{{onePlay}}">
 						<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
 					</block>
-          <!-- 照片的大小和文本的关系 -->
 					<block wx:else>
 						<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
 					</block>
 				</button>
-				<view class="time">29'</view>
-        <!-- time的位置相对照片位置默认居中 -->
+				<view class="time">{{userData.audioLength}}'</view>
 			</view>
 		</view>
 		<view class="btm-operate">
-			<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
-      <!-- 评论数 -->
-			<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
-      <!-- 点赞数 -->
-			<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
-      <!-- 收藏 -->
-			<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
-      <!-- 转发 -->
+			<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>{{userData.comments.length}}</button>
+			<button class="item" bindtap="clickred" hover-class="none"><image src="{{isred?'/images/redhart.png':'/images/hart.png'}}" class="icon" mode="widthFix"></image>{{userData.upvotes.length}}</button>
+			<button class="item" bindtap="collect" hover-class="none"><image src="{{iscollected?'/images/collect.png':'/images/collected.png'}}" class="icon" mode="widthFix"></image></button>
+			<button class="item" bindtap="forward" hover-class="none"><image src="/images/forward.png" class="icon" mode="widthFix"></image></button>
 		</view>
 	</view>
 
 	<view class="g-discussList">
 		<view class="title">评论</view>
-		<view class="item">
+		<view class="item" wx:for="{{commentData}}" wx:key="item">
 			<view class="userInfo">
-				<image src="/images/face.png" class="face" mode="widthFix"></image>
+				<image src="{{item.avatar}}" class="face" mode="widthFix" bindtap='cliclDisc' data-id='{{item.id}}'></image>
 				<view class="r">
 					<view class="txt1">
-						<text class="name">我是一个用户名</text>
-						<button class="btn-finger" bindtap="btnFinger" hover-class="none">1 
-							<block wx:if="{{Onefinger}}">
+						<text class="name">{{item.name}}</text>
+						<button class="btn-finger" bindtap="btnFinger" hover-class="none" data-id="{{item.id}}">{{item.upvoteLen}} 
+							<block wx:if="{{Onefinger[item.id]}}">
 								<image src="/images/icon-finger2.png" class="icon" mode="widthFix"></image>
 							</block>
 							<block wx:else>
@@ -57,23 +50,19 @@
 							</block>
 						</button>
 					</view>
-					<view class="txt2">47分钟前</view>
+					<view class="txt2">{{item.time}}</view>
 				</view>
 			</view>
 			<view class="audio-box">
-				<text class="per" style="width:100%;"></text>
-        <!-- width:100%? -->
-				<text class="time">9'</text>
-        <!-- 语音读取时长 -->
+				<text class="per" style="width:100%;" data-id='{{item.id}}' bindtap="{{audioPlay[item.id]?'':'play'}}"></text>
+				<text class="time">{{item.audioLength}}'</text>
 			</view>
 		</view>
 	</view>
 
 	<view class="fixed-operate">
 		<navigator class="btn1" url="">评论</navigator>
-    <!-- navigator？ -->
 		<button class="btn-voice" bindtap="btnVoice" hover-class="none">{{voice?'录音中...':'点击开始录音'}}</button>
-		<button class="btn2 {{voiceOk?'':'gray'}}" bindtap="" hover-class="none">发送</button>
-    <!-- 评论键换成icon可切换录音和打字/录音结束语音条变成可听语音条/发送键变黑 -->
+		<button class="btn2 {{voiceOk?'':'gray'}}" bindtap="{{voiceOk?'submit':''}}" hover-class="none">发送</button>
 	</view>
 </view>

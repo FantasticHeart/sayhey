@@ -1,16 +1,17 @@
 {
 	"description": "项目配置文件。",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"autoAudits": false
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.3.0",
-	"appid": "wx7216fb680151379a",
-	"projectname": "xcx-20190217-173731",
+	"appid": "wx878eebce50f8331b",
+	"projectname": "%E5%B0%8F%E7%A8%8B%E5%BA%8F",
 	"condition": {
 		"search": {
 			"current": -1,
@@ -29,61 +30,68 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 7,
+			"current": 8,
 			"list": [
 				{
-					"id": 0,
-					"name": "sayhey 动态详页",
-					"pathName": "pages/page05/index",
+					"id": -1,
+					"name": "list",
+					"pathName": "pages/list/index",
 					"query": "",
 					"scene": null
 				},
 				{
-					"id": 1,
-					"name": "sayhey首页",
+					"id": -1,
+					"name": "page01",
 					"pathName": "pages/page01/index",
 					"query": "",
 					"scene": null
 				},
 				{
-					"id": 2,
-					"name": "sayhey发布动态",
+					"id": -1,
+					"name": "page02",
 					"pathName": "pages/page02/index",
 					"query": "",
 					"scene": null
 				},
 				{
-					"id": 3,
-					"name": "sayhey 我的",
+					"id": -1,
+					"name": "page03",
 					"pathName": "pages/page03/index",
 					"query": "",
 					"scene": null
 				},
 				{
-					"id": 4,
-					"name": "sayhey动态列表",
+					"id": -1,
+					"name": "page04",
 					"pathName": "pages/page04/index",
 					"query": "",
 					"scene": null
 				},
 				{
-					"id": 5,
-					"name": "sayhey动态详页",
+					"id": -1,
+					"name": "page05",
 					"pathName": "pages/page05/index",
 					"query": "",
 					"scene": null
 				},
 				{
-					"id": 6,
-					"name": "sayhey我的关注",
+					"id": -1,
+					"name": "page06",
 					"pathName": "pages/page06/index",
 					"query": "",
 					"scene": null
 				},
 				{
-					"id": 7,
-					"name": "sayhey他的主页",
+					"id": -1,
+					"name": "page07",
 					"pathName": "pages/page07/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "page00",
+					"pathName": "pages/index/index",
 					"query": "",
 					"scene": null
 				}

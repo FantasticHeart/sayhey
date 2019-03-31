@@ -1,12 +1,14 @@
 {
   "pages":[
-    "pages/page05/index",
+    "pages/index/index",
+    "pages/page01/index",
     "pages/page02/index",
     "pages/page03/index",
-    "pages/page07/index",
     "pages/page04/index",
-    "pages/page01/index",
+    "pages/page05/index",
     "pages/page06/index",
+    "pages/page07/index",
+    "pages/page08/index",
     "pages/list/index"
   ],
   "window":{
@@ -29,13 +31,13 @@
         "text": ""
       },
       {
-        "pagePath": "pages/list/index",
+        "pagePath": "pages/page02/index",
         "iconPath": "/images/ft2.png",
         "selectedIconPath": "/images/ft2.png",
         "text": ""
       },
       {
-        "pagePath": "pages/list/index",
+        "pagePath": "pages/page03/index",
         "iconPath": "/images/ft3.png",
         "selectedIconPath": "/images/ft3.png",
         "text": ""

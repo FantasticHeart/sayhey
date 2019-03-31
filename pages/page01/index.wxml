@@ -5,241 +5,87 @@
 		<view class="item {{tabContent[2]?'on':''}}" bindtap="btnTabSwitch" data-id="2">话题</view>
 	</view>
 	<block wx:if="{{tabContent[0]}}">
-		<view class="list">
-
-			<view class="g-cardItem">
+		<view class="list" wx:for="{{userData}}" wx:key="item">
+   			<view class="g-cardItem">
 				<view class="userInfo">
-					<image src="/images/face.png" class="face" mode="widthFix"></image>
+					<image src="{{item.avatar}}" class="face" mode="widthFix" bindtap='clickOwn' data-id="{{item.dataId}}"></image>
 					<view class="r">
-						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
-						<view class="txt2">1个小时前</view>
+						<view class="txt1">{{item.name}} <text class="tag">{{item.title}}</text></view>
+						<view class="txt2">{{item.time}}</view>
 					</view>
 				</view>
-				<view class="article">
-					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
-					<view>I wanna quit.</view>
-				</view>
-        <!-- 需让article字数受限为3行 -->
-				<view class="audio-box">
-					<image src="/images/img.png" class="img" mode="widthFix"></image>
-					<view class="play-operate">
-						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
-							<block wx:if="{{onePlay}}">
-								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
-							<!-- 1.照片填充模式，考虑下。2.如果未添加照片，自动分配系统图片 -->
-              </block>
-							<block wx:else>
-								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
-							</block>
-						</button>
-						<view class="time">29'</view>
-					</view>
-          <!-- 首页只可点击头像——进去他人主页、播放——播放音频、点赞、其他都是热键——点击进入详情页 -->
-				</view>
-				<view class="btm-operate">
-					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
-					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
-				</view>
-			</view>
-			<view class="g-cardItem">
-				<view class="userInfo">
-					<image src="/images/face.png" class="face" mode="widthFix"></image>
-					<view class="r">
-						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
-						<view class="txt2">1个小时前</view>
-					</view>
-				</view>
-				<view class="article">
-					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
-					<view>I wanna quit.</view>
+				<view class="article" bindtap='clickDetail' data-id='{{item.dataId}}'>
+					<view>{{item.content}}</view>
 				</view>
 				<view class="audio-box">
-					<image src="/images/img.png" class="img" mode="widthFix"></image>
+					<image src="{{gIp+item.imgPath}}" class="img" mode="widthFix"></image>
 					<view class="play-operate">
-						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
-							<block wx:if="{{onePlay}}">
+						<button class="btn-play" bindtap="{{onePlay[item.dataId]?'':'btnOnePlay'}}" hover-class="none" data-id="{{item.dataId}}">
+							<block wx:if="{{onePlay[item.dataId]}}">
 								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
 							</block>
 							<block wx:else>
 								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
 							</block>
 						</button>
-						<view class="time">29'</view>
+						<view class="time">{{item.audioTime}}'</view>
 					</view>
 				</view>
 				<view class="btm-operate">
-					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
-					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
+					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix" bindtap="clickDetail" data-id='{{item.dataId}}'></image>{{item.comment}}</button>
+					<button class="item" bindtap="" hover-class="none"><image src="{{isred[item.dataId]?'/images/redhart.png':'/images/hart.png'}}" class="icon" bindtap="clickred" mode="widthFix" data-id='{{item.dataId}}'></image>{{item.upvoteNum}}</button>
 				</view>
 			</view>
-			<view class="g-cardItem">
-				<view class="userInfo">
-					<image src="/images/face.png" class="face" mode="widthFix"></image>
-					<view class="r">
-						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
-						<view class="txt2">1个小时前</view>
-					</view>
-				</view>
-				<view class="article">
-					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
-					<view>I wanna quit.</view>
-				</view>
-				<view class="audio-box">
-					<image src="/images/img.png" class="img" mode="widthFix"></image>
-					<view class="play-operate">
-						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
-							<block wx:if="{{onePlay}}">
-								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
-							</block>
-							<block wx:else>
-								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
-							</block>
-						</button>
-						<view class="time">29'</view>
-					</view>
-				</view>
-				<view class="btm-operate">
-					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
-					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
-				</view>
-			</view>
-
-
 		</view>
 	</block>
 	<block wx:if="{{tabContent[1]}}">
-		<view class="list">
-
-			<view class="g-cardItem">
+		<view class="list" wx:for="{{focusData}}" wx:key="item">
+   			<view class="g-cardItem">
 				<view class="userInfo">
-					<image src="/images/face.png" class="face" mode="widthFix"></image>
+					<image src="{{item.avatar}}" class="face" mode="widthFix"></image>
 					<view class="r">
-						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
-						<view class="txt2">1个小时前</view>
+						<view class="txt1">{{item.name}} <text class="tag">{{item.title}}</text></view>
+						<view class="txt2">{{item.time}}</view>
 					</view>
 				</view>
-				<view class="article">
-					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
-					<view>I wanna quit.</view>
+				<view class="article" bindtap='clickDetail' data-id='{{item.dataId}}'>
+					<view>{{item.content}}</view>
 				</view>
 				<view class="audio-box">
-					<image src="/images/img.png" class="img" mode="widthFix"></image>
+					<image src="{{gIp+item.imgPath}}" class="img" mode="widthFix"></image>
 					<view class="play-operate">
-						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
-							<block wx:if="{{onePlay}}">
+						<button class="btn-play" bindtap="{{onePlay[item.dataId]?'':'btnOnePlay'}}" hover-class="none" data-id="{{item.dataId}}" >
+							<block wx:if="{{onePlay[item.dataId]}}">
 								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
 							</block>
 							<block wx:else>
 								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
 							</block>
 						</button>
-						<view class="time">29'</view>
+						<view class="time">{{item.audioTime}}'</view>
 					</view>
 				</view>
 				<view class="btm-operate">
-					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
-					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
+					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix" bindtap="clickDetail" data-id='{{item.dataId}}'></image>{{item.comment}}</button>
+					<button class="item" bindtap="" hover-class="none"><image src="{{isred[item.dataId]?'/images/redhart.png':'/images/hart.png'}}" class="icon" bindtap="clickred" mode="widthFix" data-id='{{item.dataId}}'></image>{{item.upvoteNum}}</button>
 				</view>
 			</view>
-			<view class="g-cardItem">
-				<view class="userInfo">
-					<image src="/images/face.png" class="face" mode="widthFix"></image>
-					<view class="r">
-						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
-						<view class="txt2">1个小时前</view>
-					</view>
-				</view>
-				<view class="article">
-					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
-					<view>I wanna quit.</view>
-				</view>
-				<view class="audio-box">
-					<image src="/images/img.png" class="img" mode="widthFix"></image>
-					<view class="play-operate">
-						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
-							<block wx:if="{{onePlay}}">
-								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
-							</block>
-							<block wx:else>
-								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
-							</block>
-						</button>
-						<view class="time">29'</view>
-					</view>
-				</view>
-				<view class="btm-operate">
-					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
-					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
-				</view>
-			</view>
-			<view class="g-cardItem">
-				<view class="userInfo">
-					<image src="/images/face.png" class="face" mode="widthFix"></image>
-					<view class="r">
-						<view class="txt1">ZYue航 <text class="tag">Travel</text></view>
-						<view class="txt2">1个小时前</view>
-					</view>
-				</view>
-				<view class="article">
-					<view>I thought I could fight by myself，But the truth is that I can not fight anymore without you.</view>
-					<view>I wanna quit.</view>
-				</view>
-				<view class="audio-box">
-					<image src="/images/img.png" class="img" mode="widthFix"></image>
-					<view class="play-operate">
-						<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
-							<block wx:if="{{onePlay}}">
-								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
-							</block>
-							<block wx:else>
-								<image src="/images/icon-play.png" class="icon" mode="widthFix"></image>
-							</block>
-						</button>
-						<view class="time">29'</view>
-					</view>
-				</view>
-				<view class="btm-operate">
-					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>8</button>
-					<button class="item" bindtap="" hover-class="none"><image src="/images/hart.png" class="icon" mode="widthFix"></image>25</button>
-				</view>
-			</view>
-
-
 		</view>
 	</block>
 	<block wx:if="{{tabContent[2]}}">
 		<view class="list3">
 			<view class="tips">3 Diverse topics everyday</view>
-			<view class="item">
-				<view class="txt1">1.<text class="tag">Travel</text></view>
+      <view wx:for="{{topicData}}" wx:key="item">
+      <view class="item" bindtap='clickPut' data-id="{{item.id}}">
+				<view class="txt1">{{item.id+1}}.<text class="tag">{{item.title}}</text></view>
 				<view class="txt2">
-					<view>Did u see the movie 《Aquaman》？</view>
-					<view>Were you attracted by</view>
-					<view>its splendid scene in the sea?</view>
-					<view>Tell us something about it ^-^</view>
+					<view>{{item.content}}</view>
 				</view>
 				<view class="person">23人已参与</view>
 			</view>
-			<view class="item">
-				<view class="txt1">1.<text class="tag">Travel</text></view>
-				<view class="txt2">
-					<view>Did u see the movie 《Aquaman》？</view>
-					<view>Were you attracted by</view>
-					<view>its splendid scene in the sea?</view>
-					<view>Tell us something about it ^-^</view>
-				</view>
-				<view class="person">23人已参与</view>
-			</view>
-			<view class="item">
-				<view class="txt1">1.<text class="tag">Travel</text></view>
-				<view class="txt2">
-					<view>Did u see the movie 《Aquaman》？</view>
-					<view>Were you attracted by</view>
-					<view>its splendid scene in the sea?</view>
-					<view>Tell us something about it ^-^</view>
-				</view>
-				<view class="person">23人已参与</view>
-			</view>
+      </view>
+			
+			
 		</view>
 	</block>
 
