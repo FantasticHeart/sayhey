@@ -15,7 +15,32 @@ var globalData = {
     fanId:0,  //粉丝用户ID
     focusId:0,   //关注用户ID
     title:'',   
-    content:''
+    content:'',
+  tabBar: {
+    "backgroundColor": "#ffffff",
+    "color": "#979795",
+    "selectedColor": "#1c1c1b",
+    "list": [
+      {
+        "pagePath": "/pages/page01/index",
+        "iconPath": "icon/ft11.png",
+        "selectedIconPath": "icon/ft12.png",
+   //     "text": "首页"
+      },
+      {
+        "pagePath": "/pages/page02/index",
+        "iconPath": "icon/ft2.png",
+        "isSpecial": true,
+   //     "text": "发布"
+      },
+      {
+        "pagePath": "/pages/page03/index",
+        "iconPath": "icon/ft31.png",
+        "selectedIconPath": "icon/ft32.png",
+   //     "text": "我的"
+      }
+    ]
+  }
 };
 
 
@@ -26,6 +51,8 @@ var appConfig = {
 
     // 初始化App
   onLaunch: function () {
+    //隐藏系统tabbar
+    wx.hideTabBar();
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -76,9 +103,24 @@ var appConfig = {
      * App 启动后执行
      */
     onShow: function () {
+      //隐藏系统tabbar
+        wx.hideTabBar();
         const _this = this;
     },
-  
+  editTabbar: function () {
+    let tabbar = this.globalData.tabBar;
+    let currentPages = getCurrentPages();
+    let _this = currentPages[currentPages.length - 1];
+    let pagePath = _this.route;
+    (pagePath.indexOf('/') != 0) && (pagePath = '/' + pagePath);
+    for (let i in tabbar.list) {
+      tabbar.list[i].selected = false;
+      (tabbar.list[i].pagePath == pagePath) && (tabbar.list[i].selected = true);
+    }
+    _this.setData({
+      tabbar: tabbar
+    });
+  },
 
 
 

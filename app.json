@@ -35,12 +35,6 @@
         "text": ""
       },
       {
-        "pagePath": "pages/page02/index",
-        "iconPath": "/images/ft2.png",
-        "selectedIconPath": "/images/ft2.png",
-        "text": ""
-      },
-      {
         "pagePath": "pages/page03/index",
         "iconPath": "/images/ft31.png",
         "selectedIconPath": "/images/ft32.png",
