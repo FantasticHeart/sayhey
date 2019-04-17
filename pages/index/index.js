@@ -28,6 +28,7 @@ Page({
                 wx.switchTab({
                   url: '/pages/page01/index',
                 })
+                app.onShow();
                 wx.showToast({
                   title: '登录成功',
                   duration: 2000

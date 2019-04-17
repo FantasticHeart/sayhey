@@ -5,6 +5,7 @@ const innerAudioContext = wx.createInnerAudioContext();       //播放器
 Page({
   // 页面的初始数据
   data: {
+    tabbar: {},
     isred:[],         //发现栏动态是否被点赞
     temisred: [],      //关注栏动态是否被点赞
     onePlay:[],       //发现栏动态是否在播放音频
@@ -122,8 +123,7 @@ Page({
           }
           if (_this.data.currentTab == 1) {
             _this.data.temisred = [];
-          }
-          ;
+          };
           let temInfo = _this.data.focusData;
           var tem = res.data.posts;
           innerAudioContext.stop()
@@ -627,6 +627,8 @@ Page({
   },
   // 生命周期函数--监听页面加载
   onLoad: function (options) {
+    
+    app.editTabbar();
     _this = this;
     wx.getSystemInfo({          //设置窗口大小
       success: function (res) {
@@ -688,11 +690,11 @@ Page({
     })
   },
   // 生命周期函数--监听页面初次渲染完成
-  onReady: function () { },
+  onReady: function () {
+    wx.hideTabBar();
+   },
   // 生命周期函数--监听页面显示
   onShow: function () {
-    wx.showTabBar({
-    })
     if(_this.data.currentTab==0){
       wx.request({
         url: app.globalData.globalIp + '/getLatestPosts',

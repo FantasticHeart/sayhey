@@ -110,6 +110,6 @@
             </scroll-view>
         </swiper-item>
     </swiper>
-
+<tabbar tabbar="{{tabbar}}"></tabbar> 
 </view>
 

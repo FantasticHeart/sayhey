@@ -30,4 +30,5 @@
 			<navigator class="arrow" url="">联系我们</navigator>
 		</view>
 	</view>
+  <tabbar tabbar="{{tabbar}}"></tabbar> 
 </view>
