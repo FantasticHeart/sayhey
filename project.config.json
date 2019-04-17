@@ -10,8 +10,10 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.3.0",
-	"appid": "wx878eebce50f8331b",
-	"projectname": "%E5%B0%8F%E7%A8%8B%E5%BA%8F",
+	"appid": "wxaed01d6da0675c64",
+	"projectname": "sayhey",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -30,7 +32,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 8,
+			"current": 10,
 			"list": [
 				{
 					"id": -1,
@@ -93,6 +95,19 @@
 					"name": "page00",
 					"pathName": "pages/index/index",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "page09",
+					"pathName": "pages/page09/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "page10",
+					"pathName": "pages/page10/index",
 					"scene": null
 				}
 			]

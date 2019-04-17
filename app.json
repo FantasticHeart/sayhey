@@ -1,6 +1,6 @@
 {
-  "pages":[
-    "pages/index/index",
+  "pages": [        
+    "pages/index/index",        
     "pages/page01/index",
     "pages/page02/index",
     "pages/page03/index",
@@ -9,25 +9,29 @@
     "pages/page06/index",
     "pages/page07/index",
     "pages/page08/index",
+    "pages/page09/index",
+    "pages/page10/index",
+    "pages/page11/index",
+    "pages/page12/index",
     "pages/list/index"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "white",
     "navigationBarTitleText": "SayHey",
-    "navigationBarTextStyle":"black",
+    "navigationBarTextStyle": "black",
     "enablePullDownRefresh": false
   },
-  "tabBar": {
-    "borderStyle":"black",
-    "backgroundColor":"#fff",
-    "color":"#868696",
-    "selectedColor":"#ff4c13",
+  "tabBar": {        
+    "borderStyle": "black",
+    "backgroundColor": "#fff",
+    "color": "#868696",
+    "selectedColor": "#ff4c13",
     "list": [
       {
         "pagePath": "pages/page01/index",
-        "iconPath": "/images/ft1.png",
-        "selectedIconPath": "/images/ft1.png",
+        "iconPath": "/images/ft11.png",
+        "selectedIconPath": "/images/ft12.png",
         "text": ""
       },
       {
@@ -38,8 +42,8 @@
       },
       {
         "pagePath": "pages/page03/index",
-        "iconPath": "/images/ft3.png",
-        "selectedIconPath": "/images/ft3.png",
+        "iconPath": "/images/ft31.png",
+        "selectedIconPath": "/images/ft32.png",
         "text": ""
       }
     ]
@@ -48,5 +52,6 @@
     "request": 10000,
     "downloadFile": 10000
   },
-  "debug": false
+  "debug": false,
+  "sitemapLocation": "sitemap.json"
 }

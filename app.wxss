@@ -1,4 +1,24 @@
 @charset "UTF-8";
+.icon{
+  width: 50rpx;
+  height: 50rpx
+}
+.nick-name{
+  font-weight: bolder;
+}
+.imgsize{
+  display: flex;
+  justify-content: center
+}
+.txt{
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: normal !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
 /* 为方便后续配合，请尽量不要修改此文件。 QQ: 215611388 */
 .container {
   height: 100%;
