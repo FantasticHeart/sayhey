@@ -1,7 +1,8 @@
 <view class="wrap page02">
+<image src='/images/back.png' bindtap='back' style='width:50rpx;height:50rpx;margin-left:20rpx'></image>
 	<view class="title-box">
 		<text class="tt">Title</text>
-		<input placeholder="输入标题..." class="input" value="{{titleareaValue}}" bindinput="btnInputTitle" bindblur="btnBlurInput"  placeholder-class="phColor"/>
+		<input placeholder="输入标题..." class="input" value="{{titleareaValue}}" bindinput="btnInputTitle" placeholder-class="phColor"/>
 		<text class="number">{{titleNumber}}/15</text>
 		<button class="btn btn-red" bindtap="btnSubmit" hover-class="none">发布</button>
 	</view>
@@ -18,25 +19,33 @@
 		</block>
 		<button class="item btn-upload" bindtap="{{btnLoad?'btnUpload':''}}"></button>
 	</view>
+  <view wx:if="{{isVoice}}">
+  <view class='replay'><image src="{{isplay?'/images/icon-pause1.png':'/images/icon-play1.png'}}" style='width:50rpx;height:50rpx' bindtap='play'></image><text style='position:relative;top:-13rpx'>{{audioLength+"'"}}</text></view>
+  </view>
 
 	<view class="fixed-operate">
 		<view class="txt" wx:if="{{voiceStatus==1}}">点击开始录音</view>
-    <view class="txt" wx:elif="{{voiceStatus==2}}">点击停止录音</view>
-    <view class="txt" wx:else>点击回放录音</view>
+    <view class="txt" wx:elif="{{voiceStatus==2}}">点击结束录音</view>
 		<view class="operate">
-			<button class="btn-left" bindtap="back" hover-class="none">取消</button>
-			<button class="btn-center" bindtap="btnVoice" hover-class="none">
+    <view wx:if="{{isVoice}}">
+			<button class="btn-left" bindtap="cancel" hover-class="none">取消</button></view>
+			<button class="btn-center" bindtap="{{isplay||isupload?'':'btnVoice'}}" hover-class="none">
 				<block wx:if="{{voiceStatus==1}}">
 					<image src="/images/voice1.png" class="icon" mode="widthFix"></image>
 				</block>
         <block wx:elif="{{voiceStatus==2}}">
 					<image src="/images/voice2.png" class="icon" mode="widthFix"></image>
 				</block>
-				<block wx:else>
-					<image src="/images/voice3.png" class="icon" mode="widthFix"></image>
-				</block>
 			</button>
-		
+      <view wx:if="{{isVoice}}">
+      <view wx:if="{{!isupload}}">
+      <button class="btn-right" bindtap="" hover-class="none" style='color:red' bindtap='upload'>上传</button>
+      </view>
+      <view wx:else>
+      <button class="btn-right" bindtap="" hover-class="none" style='color:red'>已上传</button>
+      </view>
+      </view>
+		  
 			
 		</view>
 	</view>

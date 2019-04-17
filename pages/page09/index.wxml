@@ -1,36 +1,16 @@
-<view class="wrap page07">
-	<view class="user-panel">
-		<button class="btn btn-white" bindtap="btnFocus" hover-class="none"> {{focus?'已关注':'+关注'}}</button>
-		<view class="face">
-			<image src="{{userData.avatar}}" class="faceImg" mode="widthFix"></image>
-			<view class="nick-name">{{userData.userName}}</view>
-		</view>
-	</view>
-	<view class="info">
-		<view class="item">
-			  <view class="txt1" bindtap='clickPost'>动态</view>
-			  <view class="txt2">{{userData.postNum}}</view>
-		</view>
-		<view class="item">
-			  <view class="txt1" bindtap='clickFocus'>关注</view>
-			  <view class="txt2">{{userData.focusNum}}</view>
-		</view>
-		<view class="item">
-			  <view class="txt1" bindtap='clickFans'>粉丝</view>
-			  <view class="txt2">{{userData.fansNum}}</view>
-		</view>
-	</view>
-	<view class="list" wx:for="{{postData}}" wx:key="item">
+<view class="wrap page04">
+    <view class="list" wx:for="{{postData}}" wx:key="item">
    			<view class="g-cardItem">
 				<view class="userInfo">
-					<image src="{{item.avatar}}" class="face" mode="widthFix"></image>
-					<view class="r" bindtap='clickDetail' data-id='{{item.dataId}}'>
+					<image src="{{item.avatar}}" class="face" mode="widthFix" bindtap='clickOwn'></image>
+					<view class="r" bindtap='' data-id='{{item.dataId}}'>
 						<view class="nick-name">{{item.name}} <text class="tag">{{item.title}}</text></view>
 						<view class="txt2">{{item.time}}</view>
+            <image src="/images/dele.png" class="dele" bindtap='delete' data-id="{{item.dataId}}"></image>
 					</view>
 				</view>
 				<view class="article" bindtap='clickDetail' data-id='{{item.dataId}}'>
-					<view class="txt">{{item.content}}</view>
+					<view class='txt'>{{item.content}}</view>
 				</view>
 				<view class="audio-box">
 					<view class='imgsize' bindtap='clickDetail' data-id='{{item.dataId}}'>
@@ -53,5 +33,4 @@
 				</view>
 			</view>
 		</view>
-    
 </view>

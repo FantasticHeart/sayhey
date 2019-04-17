@@ -1,11 +1,10 @@
 <view class="wrap page06">
 	<view class="list" wx:for="{{focusData}}" wx:key="item">
-		<navigator class="item" url="/pages/page07/index">
-			<image src="{{item.avatar}}" class="face" mode="widthFix" data-id="{{item.id}}" bindtap='clickOwn'></image>
+		<view class="item" data-id="{{item.id}}" bindtap='clickOwn'>
+			<image src="{{item.avatar}}" class="face" mode="widthFix"></image>
 			<view class="r">
-				<view class="txt1">{{item.name}}</view>
-				<view class="txt2">{{item.info}}</view>
+				<view class="nick-name">{{item.name}}</view>
 			</view>
-		</navigator>
+		</view>
 	</view>
 </view>

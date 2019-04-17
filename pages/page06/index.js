@@ -12,7 +12,10 @@ Page({
     var temp = _this.data.focusData;
     temp.forEach((item, index) => {
       if (idx == index) {
-        app.globalData.ofuserId = temp[idx].userId;
+        app.globalData.focusId = temp[idx].userId;
+        wx.navigateTo({
+          url: '/pages/page11/index',
+        })
       }
     })
 

@@ -1,4 +1,13 @@
 /**index.wxss**/
+.container{
+    width:100%;
+    height:100%;
+    overflow: hidden;
+    position:fixed;
+    background-repeat:no-repeat; 
+    background-size:100% 100%;
+    -moz-background-size:100% 100%;
+}
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -6,37 +15,19 @@
 }
 
 .userinfo-avatar {
-  position: absolute;
-  width:400rpx;
-  height: 128rpx;
+  width: 250rpx;
+  height: 80rpx;
   margin: 20rpx;
-    top: 300px;
-  border-radius: 00%;
+  position: fixed;
+  top: 70%;
+  left: 30%
 }
 
 .userinfo-nickname {
   color: #aaa;
+  font-weight: bolder;
 }
 
 .usermotto {
   margin-top: 200px;
-  text-align: center;
-}
-
-.warp {
-  background-repeat:no-repeat;
- background-size:100% 100%;
- -moz-background-size:100% 100%;
-
-}
-
-.container{
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: fixed;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  -moz-background-size:100% 100%;
-
 }

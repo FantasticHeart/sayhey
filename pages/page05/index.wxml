@@ -9,12 +9,14 @@
 			</view>
 		</view>
 		<view class="article">
-			<view>{{userData.postContent}}</view>
+			<view class='deTxt'>{{userData.postContent}}</view>
 		</view>
 		<view class="audio-box">
-			<image src="{{gIp+userData.postImg}}" class="img" mode="widthFix"></image>
+    <view class='imgsize'>
+			<image src="{{gIp+userData.postImg}}" class="img" bindload="imageLoad" style="width:{{imgwidth}}rpx; height:{{imgheight}}rpx;"></image>
+      </view>
 			<view class="play-operate">
-				<button class="btn-play" bindtap="{{onePlay?'':'btnOnePlay'}}" hover-class="none">
+				<button class="btn-play" bindtap="btnOnePlay" hover-class="none">
 					<block wx:if="{{onePlay}}">
 						<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
 					</block>
@@ -40,7 +42,7 @@
 				<image src="{{item.avatar}}" class="face" mode="widthFix" bindtap='cliclDisc' data-id='{{item.id}}'></image>
 				<view class="r">
 					<view class="txt1">
-						<text class="name">{{item.name}}</text>
+						<text class="nick-name">{{item.name}}</text>
 						<button class="btn-finger" bindtap="btnFinger" hover-class="none" data-id="{{item.id}}">{{item.upvoteLen}} 
 							<block wx:if="{{Onefinger[item.id]}}">
 								<image src="/images/icon-finger2.png" class="icon" mode="widthFix"></image>
@@ -54,15 +56,24 @@
 				</view>
 			</view>
 			<view class="audio-box">
-				<text class="per" style="width:100%;" data-id='{{item.id}}' bindtap="{{audioPlay[item.id]?'':'play'}}"></text>
+				<text class="per" style="width:100%;" data-id='{{item.id}}' bindtap="play"></text>
 				<text class="time">{{item.audioLength}}'</text>
 			</view>
 		</view>
 	</view>
 
 	<view class="fixed-operate">
-		<navigator class="btn1" url="">评论</navigator>
-		<button class="btn-voice" bindtap="btnVoice" hover-class="none">{{voice?'录音中...':'点击开始录音'}}</button>
+		<button class="btn1" bindtap="{{voiceOk?'cancel':''}}">{{voiceOk?'取消':'评论'}}</button>
+    <view wx:if="{{voice==0}}">
+    <button class="btn-voice" bindtap="btnVoice" hover-class="none">点击开始录音</button>
+    </view>
+    <view wx:elif="{{voice==1}}">
+    <button class="btn-voice" bindtap="btnVoice" hover-class="none">录音中...</button>
+    </view>
+    <view wx:else>
+    <button class="btn-voice" bindtap="btnVoice" hover-class="none">{{audioLen}}</button>
+    </view>
+		
 		<button class="btn2 {{voiceOk?'':'gray'}}" bindtap="{{voiceOk?'submit':''}}" hover-class="none">发送</button>
 	</view>
 </view>

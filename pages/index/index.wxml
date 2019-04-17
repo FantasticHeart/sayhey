@@ -1,15 +1,13 @@
 <!--index.wxml-->
-<view class="container" style="background:url('../../images/indexbak.jpg')">
+<view class="container" style="background-image:url({{gIp+'/upload/img/background.png'}})">
   <view class="userinfo">
-    <block wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="../../images/start.jpg" mode="cover"></image>
-    </block>
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" style='font-weight:bolder;font-size:50rpx;position:fixed;top:5%'> 获取个人信息 </button>
     <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="/images/login.png" mode="cover"></image>
+      <text class="userinfo-nickname"></text>
     </block>
   </view>
   <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+    <text class="user-motto"></text>
   </view>
 </view>

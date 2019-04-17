@@ -3,18 +3,19 @@
    			<view class="g-cardItem">
 				<view class="userInfo">
 					<image src="{{item.avatar}}" class="face" mode="widthFix" bindtap='clickOwn'></image>
-					<view class="r">
-						<view class="txt1">{{item.name}} <text class="tag">{{item.title}}</text></view>
+					<view class="r" bindtap='clickDetail' data-id='{{item.dataId}}'>
+						<view class="nick-name">{{item.name}} <text class="tag">{{item.title}}</text></view>
 						<view class="txt2">{{item.time}}</view>
 					</view>
 				</view>
 				<view class="article" bindtap='clickDetail' data-id='{{item.dataId}}'>
-					<view>{{item.content}}</view>
+					<view class="txt">{{item.content}}</view>
 				</view>
 				<view class="audio-box">
-					<image src="{{gIp+item.imgPath}}" class="img" mode="widthFix"></image>
+					<view class='imgsize' bindtap='clickDetail' data-id='{{item.dataId}}'>
+        <image src="{{gIp+item.imgPath}}" class="img" bindload="imageLoad" style="width:{{imgwidth[item.dataId]}}rpx; height:{{imgheight[item.dataId] }}rpx;" data-id='{{item.dataId}}'></image></view>
 					<view class="play-operate">
-						<button class="btn-play" bindtap="{{onePlay[item.dataId]?'':'btnOnePlay'}}" hover-class="none" data-id="{{item.dataId}}" >
+						<button class="btn-play" bindtap="btnOnePlay" hover-class="none" data-id="{{item.dataId}}" >
 							<block wx:if="{{onePlay[item.dataId]}}">
 								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
 							</block>

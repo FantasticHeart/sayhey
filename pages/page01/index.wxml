@@ -1,26 +1,36 @@
 <view class="wrap page01">
+<scroll-view scroll-x="true" class="tab-h" scroll-left="{{scrollLeft}}">
 	<view class="g-tabHeader">
-		<view class="item {{tabContent[0]?'on':''}}" bindtap="btnTabSwitch" data-id="0">发现</view>
-		<view class="item {{tabContent[1]?'on':''}}" bindtap="btnTabSwitch" data-id="1">关注</view>
-		<view class="item {{tabContent[2]?'on':''}}" bindtap="btnTabSwitch" data-id="2">话题</view>
+  
+  <view style='margin-left:20rpx' class="item {{currentTab==0?'on':''}}"  bindtap="btnTabSwitch" data-current="0">发现</view>
+		<view class="item {{currentTab==1?'on':''}}"  bindtap="btnTabSwitch" data-current="1">关注</view>
+		<view style='margin-right:20rpx' class="item {{currentTab==2?'on':''}}"  bindtap="btnTabSwitch" data-current="2">话题</view>
+  
+		
 	</view>
-	<block wx:if="{{tabContent[0]}}">
-		<view class="list" wx:for="{{userData}}" wx:key="item">
+  </scroll-view>
+  <swiper class="tab-content" current="{{currentTab}}" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx">
+        <swiper-item>
+            <scroll-view scroll-y="true" class="scoll-h"  bindscrolltolower='refresh'>
+                <view class="list" wx:for="{{userData}}" wx:key="item">
    			<view class="g-cardItem">
 				<view class="userInfo">
 					<image src="{{item.avatar}}" class="face" mode="widthFix" bindtap='clickOwn' data-id="{{item.dataId}}"></image>
-					<view class="r">
-						<view class="txt1">{{item.name}} <text class="tag">{{item.title}}</text></view>
+					<view class="r" bindtap='clickDetail' data-id='{{item.dataId}}'>
+						<view class="nick-name">{{item.name}} <text class="tag">{{item.title}}</text></view>
 						<view class="txt2">{{item.time}}</view>
 					</view>
 				</view>
 				<view class="article" bindtap='clickDetail' data-id='{{item.dataId}}'>
-					<view>{{item.content}}</view>
+					<view class='txt'>{{item.content}}</view>
 				</view>
 				<view class="audio-box">
-					<image src="{{gIp+item.imgPath}}" class="img" mode="widthFix"></image>
+        <view class='imgsize'  bindtap='clickDetail' data-id='{{item.dataId}}'>
+        <image src="{{gIp+item.imgPath}}" class="img" bindload="imageLoad"  style="width:{{imgwidth[item.dataId]}}rpx; height:{{imgheight[item.dataId] }}rpx;" data-id='{{item.dataId}}'></image>
+        </view>
+					
 					<view class="play-operate">
-						<button class="btn-play" bindtap="{{onePlay[item.dataId]?'':'btnOnePlay'}}" hover-class="none" data-id="{{item.dataId}}">
+						<button class="btn-play" bindtap="btnOnePlay" hover-class="none" data-id="{{item.dataId}}">
 							<block wx:if="{{onePlay[item.dataId]}}">
 								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
 							</block>
@@ -37,25 +47,31 @@
 				</view>
 			</view>
 		</view>
-	</block>
-	<block wx:if="{{tabContent[1]}}">
-		<view class="list" wx:for="{{focusData}}" wx:key="item">
+    
+            </scroll-view>
+            
+        </swiper-item>
+        <swiper-item>
+            <scroll-view scroll-y="true" class="scoll-h" >
+                <view class="list" wx:for="{{focusData}}" wx:key="item">
    			<view class="g-cardItem">
 				<view class="userInfo">
 					<image src="{{item.avatar}}" class="face" mode="widthFix"></image>
-					<view class="r">
-						<view class="txt1">{{item.name}} <text class="tag">{{item.title}}</text></view>
+					<view class="r" bindtap='clickDetail' data-id='{{item.dataId}}'>
+						<view class="nick-name">{{item.name}} <text class="tag">{{item.title}}</text></view>
 						<view class="txt2">{{item.time}}</view>
 					</view>
 				</view>
 				<view class="article" bindtap='clickDetail' data-id='{{item.dataId}}'>
-					<view>{{item.content}}</view>
+					<view class="txt">{{item.content}}</view>
 				</view>
 				<view class="audio-box">
-					<image src="{{gIp+item.imgPath}}" class="img" mode="widthFix"></image>
+					<view class='imgsize' bindtap='clickDetail' data-id='{{item.dataId}}'>
+        <image src="{{gIp+item.imgPath}}" class="img" bindload="temimageLoad" style="width:{{temimgwidth[item.dataId]}}rpx; height:{{temimgheight[item.dataId] }}rpx;" data-id='{{item.dataId}}'></image>
+        </view>
 					<view class="play-operate">
-						<button class="btn-play" bindtap="{{onePlay[item.dataId]?'':'btnOnePlay'}}" hover-class="none" data-id="{{item.dataId}}" >
-							<block wx:if="{{onePlay[item.dataId]}}">
+						<button class="btn-play" bindtap="tembtnOnePlay" hover-class="none" data-id="{{item.dataId}}" >
+							<block wx:if="{{temonePlay[item.dataId]}}">
 								<image src="/images/icon-pause.png" class="icon" mode="widthFix"></image>
 							</block>
 							<block wx:else>
@@ -67,27 +83,33 @@
 				</view>
 				<view class="btm-operate">
 					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix" bindtap="clickDetail" data-id='{{item.dataId}}'></image>{{item.comment}}</button>
-					<button class="item" bindtap="" hover-class="none"><image src="{{isred[item.dataId]?'/images/redhart.png':'/images/hart.png'}}" class="icon" bindtap="clickred" mode="widthFix" data-id='{{item.dataId}}'></image>{{item.upvoteNum}}</button>
+					<button class="item" bindtap="" hover-class="none"><image src="{{temisred[item.dataId]?'/images/redhart.png':'/images/hart.png'}}" class="icon" bindtap="temclickred" mode="widthFix" data-id='{{item.dataId}}'></image>{{item.upvoteNum}}</button>
 				</view>
 			</view>
 		</view>
-	</block>
-	<block wx:if="{{tabContent[2]}}">
-		<view class="list3">
+            </scroll-view>
+        </swiper-item>
+        <swiper-item>
+            <scroll-view scroll-y="true" class="scoll-h" >
+                <view class="list3">
 			<view class="tips">3 Diverse topics everyday</view>
       <view wx:for="{{topicData}}" wx:key="item">
       <view class="item" bindtap='clickPut' data-id="{{item.id}}">
 				<view class="txt1">{{item.id+1}}.<text class="tag">{{item.title}}</text></view>
 				<view class="txt2">
-					<view>{{item.content}}</view>
+					<text>{{item.content}}</text>
 				</view>
-				<view class="person">23人已参与</view>
+				<view class="person"></view>
 			</view>
+       
       </view>
-			
+			<image src='/images/topic.png'></image>
 			
 		</view>
-	</block>
+   
+            </scroll-view>
+        </swiper-item>
+    </swiper>
 
 </view>
 

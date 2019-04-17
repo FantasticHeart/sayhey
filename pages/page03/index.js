@@ -10,7 +10,7 @@ Page({
   clickPost: function () {
     app.globalData.ofuserId = _this.data.userData.userId;
     wx.navigateTo({
-      url: '/pages/page04/index',
+      url: '/pages/page09/index',
     })
   },
   clickFocus: function () {

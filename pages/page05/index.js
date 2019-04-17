@@ -1,10 +1,13 @@
 //获取应用实例
 const app = getApp()
+const innerAudioContext = wx.createInnerAudioContext()
+
 let _this;
 Page({
   // 页面的初始数据
   data: {
-    voice:false,
+    isplay:false,
+    voice:0,
     voiceOk:false,  //录音完成
     onePlay:false,
     Onefinger:[],
@@ -14,29 +17,51 @@ Page({
     isred:false,
     iscollected:false,
     audioPath:'',
+    audio:'',
     commentId:0,
     audioLen:0,
-    audioPlay:[]
+    imgwidth: 0,
+    imgheight: 0
   },
-  play:function(e){
-    var idx=e.currentTarget.dataset.id;
-    var temp=_this.data.audioPlay;
-    temp.forEach((item, index) => {
-      if(idx==index){
-        temp[idx]=!temp[idx];
-        if(temp[idx]){
-          _this.innerAudioContext = wx.createInnerAudioContext();
-          _this.innerAudioContext.src = _this.data.gIp + _this.data.commentData[idx].audioPath; // 这里可以是录音的临时路径
-          _this.innerAudioContext.play()
-          _this.innerAudioContext.onEnded((res) => {
-            console.log('播放结束!');
-            temp[idx] = !temp[idx]
-            _this.setData({ audioPlay: temp })
+  cancel:function(){
+    wx.showModal({
+      title: '提示',
+      content: '是否删除？',
+      success:function(res){
+        if(res.confirm){
+          innerAudioContext.stop();
+          _this.setData({
+            voice: 0,
+            voiceOk: false
           })
         }
       }
     })
-    _this.setData({ audioPlay: temp })
+    
+  },
+  imageLoad: function (e) {
+    
+    var width = e.detail.width;
+    var height = e.detail.height;
+    var ratio = height / width;
+    var viewHeight = 500;
+    var viewWidth = 500 / ratio;
+    _this.setData({
+      imgwidth: viewWidth,
+      imgheight: viewHeight
+    })
+  },
+  play:function(e){
+    var idx=e.currentTarget.dataset.id;
+  //  const innerAudioContext = wx.createInnerAudioContext()
+    
+  //  innerAudioContext.src = _this.data.gIp+_this.data.commentData[idx].audioPath;
+    _this.setData({
+      onePlay:false
+    })
+    innerAudioContext.src = _this.data.gIp + _this.data.commentData[idx].audioPath; // 这里可以是录音的临时路径
+    console.log(innerAudioContext.src)
+    innerAudioContext.play()
   },
   collect:function(){
     _this.setData({
@@ -55,6 +80,17 @@ Page({
           postId: _this.data.userData.postId
         },
         success: function (res) {
+          if (res.data.status == 'TOKEN_EXPIRED') {
+            wx.setStorageSync('token', '')
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
+            wx.showToast({
+              title: '授权过期，请重新登录',
+              icon: 'loading',
+              duration: 2000
+            })
+          }
           console.log(res.data);
         }
       })
@@ -72,6 +108,17 @@ Page({
           postId: _this.data.userData.postId
         },
         success: function (res) {
+          if (res.data.status == 'TOKEN_EXPIRED') {
+            wx.setStorageSync('token', '')
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
+            wx.showToast({
+              title: '授权过期，请重新登录',
+              icon: 'loading',
+              duration: 2000
+            })
+          }
           console.log(res.data);
         }
       })
@@ -99,10 +146,8 @@ Page({
   },
   btnFinger:(e)=>{
     var idx=e.currentTarget.dataset.id;
-    console.log(idx)
     var temp2= _this.data.commentData;
     var temp1= _this.data.Onefinger;
-    console.log(temp1)
     temp1.forEach((item, index) => {
       if (index == idx) {
         temp1[idx] = !temp1[idx];
@@ -119,8 +164,19 @@ Page({
               commentId: temp2[idx].commentId
             },
             success: function (res) {
+              if (res.data.status == 'TOKEN_EXPIRED') {
+                wx.setStorageSync('token', '')
+                wx.reLaunch({
+                  url: '/pages/index/index',
+                })
+                wx.showToast({
+                  title: '授权过期，请重新登录',
+                  icon: 'loading',
+                  duration: 2000
+                })
+              }
               console.log(res.data);
-              //         temp1[idx].upvoteLen += 1
+                       temp2[idx].upvoteLen += 1
               _this.setData({
                 commentData: temp2,
                 Onefinger:temp1
@@ -141,8 +197,19 @@ Page({
               commentId: temp2[idx].commentId
             },
             success: function (res) {
+              if (res.data.status == 'TOKEN_EXPIRED') {
+                wx.setStorageSync('token', '')
+                wx.reLaunch({
+                  url: '/pages/index/index',
+                })
+                wx.showToast({
+                  title: '授权过期，请重新登录',
+                  icon: 'loading',
+                  duration: 2000
+                })
+              }
               console.log(res.data);
-              //    temp1[idx].upvoteLen -= 1
+                  temp2[idx].upvoteLen -= 1
               _this.setData({
                 commentData: temp2,
                 Onefinger: temp1
@@ -155,138 +222,235 @@ Page({
     
   },
   btnVoice:(e)=>{
-    _this.setData({voice:!_this.data.voice})
-    if(_this.data.voice){
+    const recorderManager = wx.getRecorderManager();
+    recorderManager.onError(function () {
+      // 录音失败的回调处理\
+      console.log('录音失败！')
+    });
+    recorderManager.onStop(function (res) {
+      _this.setData({
+        audioPath: res.tempFilePath,
+        voiceOk: true
+      })
       wx.showToast({
-        title: "语音不得超过40秒",
+        title: '录音结束',
+        duration: 500,
+      })
+      const innerAudioContext = wx.createInnerAudioContext();
+      innerAudioContext.src = res.tempFilePath;
+      innerAudioContext.autoplay = false;
+      innerAudioContext.onPlay((res) => {
+        console.log('开始播放');
+        innerAudioContext.stop();
+      })
+      innerAudioContext.onStop((res) => {
+        console.log('停止播放');
+        innerAudioContext.destroy();
+      })
+      innerAudioContext.onCanplay(() => {
+        innerAudioContext.duration //类似初始化-必须触发-不触发此函数延时也获取不到
+        setTimeout(function () {
+          //在这里就可以获取到大家梦寐以求的时长了
+          console.log(innerAudioContext.duration.toFixed(0));//延时获取长度 单位：秒
+          _this.setData({
+            audioLen: innerAudioContext.duration.toFixed(0)
+          })
+        }, 100)  //这里设置延时1秒获取
+      })
+      innerAudioContext.play();
+    });
+    let num = _this.data.voice + 1
+    num = num > 2 ? 0 : num
+    if (num==0&&_this.data.voiceOk) {
+      num=2;
+    }
+    if(num==1){
+      wx.showToast({
+        title: "语音不超60秒",
         icon: "loading",//仅支持success或者loading
-        duration: 1000
+        duration: 4000
       });
-      _this.recorderManager = wx.getRecorderManager();
-      _this.recorderManager.start({
+      recorderManager.start({
         format: 'mp3' // 如果录制acc类型音频则改成aac
       });
-      _this.recorderManager.onError(function () {
-        // 录音失败的回调处理
-
-      });
-      _this.recorderManager.onStop(function (res) {
-        // 停止录音之后，把录取到的音频放在res.tempFilePath
-        _this.innerAudioContext = wx.createInnerAudioContext()  //初始化createInnerAudioContext接口
-        //设置播放地址
-        _this.innerAudioContext.src = res.tempFilePath;
-
-        //音频进入可以播放状态，但不保证后面可以流畅播放
-        _this.innerAudioContext.onCanplay(() => {
-          _this.innerAudioContext.duration //类似初始化-必须触发-不触发此函数延时也获取不到
-          setTimeout(function () {
-            //在这里就可以获取到大家梦寐以求的时长了
-            console.log(_this.innerAudioContext.duration.toFixed(0));//延时获取长度 单位：秒
-            _this.setData({
-              audioLen: _this.innerAudioContext.duration.toFixed(0)
-            })
-          }, 100)  //这里设置延时1秒获取
+    }
+    else if(num==2&&!_this.data.voiceOk){
+        recorderManager.stop()
+    }
+    else if (num == 2 && _this.data.voiceOk){
+   //   const innerAudioContext = wx.createInnerAudioContext()
+   //   innerAudioContext.autoplay = false;
+   //   innerAudioContext.src = _this.data.audioPath;
+    /*  innerAudioContext.onEnded((res) => {
+        console.log('播放结束!');
+        wx.showToast({
+          title: '播放结束',
+          icon: "success",
+          duration: 1000
         })
-        wx.uploadFile({
-          url: app.globalData.globalIp + '/upload',
-          filePath: res.tempFilePath,
-          name: 'file',
-          method:'post',
-          header: {
-            'content-type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json',
-            "Authorization": app.globalData.token
-          },
-          formData: {
-            type: 'audio'
-          },
-          success: function (res) {
-            _this.setData({
-              audioPath: JSON.parse(res.data).url,
-              voiceOk: true
-            })
-
-          }
-        })
-      });
+        innerAudioContext.destroy()
+      })
+      innerAudioContext.onError((res) => {
+        console.log(res.errMsg)
+        console.log(res.errCode)
+        innerAudioContext.destroy()
+      })
+      innerAudioContext.onPlay((res) => {
+        console.log('播放开始!');
+      })
+      innerAudioContext.onCanplay(() => {
+        innerAudioContext.duration //类似初始化-必须触发-不触发此函数延时也获取不到
+        setTimeout(function () {
+          //在这里就可以获取到大家梦寐以求的时长了
+          console.log(innerAudioContext.duration.toFixed(0));//延时获取长度 单位：秒
+          _this.setData({
+            audioLen: innerAudioContext.duration.toFixed(0)
+          })
+        }, 100)  //这里设置延时1秒获取
+      })*/
+      _this.setData({
+        onePlay: false
+      })
+      innerAudioContext.src=_this.data.audioPath
+      console.log(innerAudioContext.src)
+      innerAudioContext.play()
     }
     else{
-        _this.recorderManager.stop()
+      
     }
+    _this.setData({
+      voice:num
+    })
   },
   submit:function(){
-    wx.request({
-      url: app.globalData.globalIp + '/addComment',
+    wx.uploadFile({
+      url: app.globalData.globalIp + '/upload',
+      filePath: _this.data.audioPath,
+      name: 'file',
       method: 'post',
       header: {
         'content-type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
         "Authorization": app.globalData.token
       },
-      data: {
-        ofUserId: app.globalData.userId,
-        ofPostId: _this.data.userData.postId,
-        commentContent:'',
-        audio:_this.data.audioPath,
-        audioLength:_this.data.audioLen
+      formData: {
+        type: 'audio'
       },
       success: function (res) {
-        console.log(res.data);
+        if (res.data.status == 'TOKEN_EXPIRED') {
+          wx.setStorageSync('token', '')
+          wx.reLaunch({
+            url: '/pages/index/index',
+          })
+          wx.showToast({
+            title: '授权过期，请重新登录',
+            icon: 'loading',
+            duration: 2000
+          })
+        }
+        _this.setData({
+          audio: JSON.parse(res.data).url,
+          voiceOk: false,
+          voice:0
+        })
         wx.request({
-          url: app.globalData.globalIp + '/getPostDetail',
+          url: app.globalData.globalIp + '/addComment',
           method: 'post',
-          header: { "Content-Type": "application/x-www-form-urlencoded" },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded',
+            "Authorization": app.globalData.token
+          },
           data: {
-            id: app.globalData.ofcommentId
+            ofUserId: app.globalData.userId,
+            ofPostId: _this.data.userData.postId,
+            commentContent: '',
+            audio: _this.data.audio,
+            audioLength: _this.data.audioLen
           },
           success: function (res) {
-            console.log(res.data);
-            _this.data.commentData=[];
-            _this.setData({
-              userData:res.data.post
-            })
-            var tem=res.data.post.comments;
-            _this.data.Onefinger.length =tem.length;
-            _this.data.Onefinger.fill(false);
-            _this.data.audioPlay.length = tem.length;
-            _this.data.audioPlay.fill(false);
-            for (var i = 0; i < tem.length; i++) {
-              for (var j = 0; j < tem[i].upvotes.length; j++) {
-                if (tem[i].upvotes[j].user.userId == app.globalData.userId) {
-                  _this.data.Onefinger[i] = true;
-                }
-              }
-              var c = { 'avatar': tem[i].user.avatar, 'name': tem[i].user.userName, 'id': i, 'upvoteLen': tem[i].upvotes.length, 'time': tem[i].time, 'audioLength': tem[i].audioLength, 'commentId': tem[i].commentId, 'audioPath': tem[i].audio,'userId':tem[i].user.userId};
-              _this.data.commentData.push(c);
+            if (res.data.status == 'TOKEN_EXPIRED') {
+              wx.setStorageSync('token', '')
+              wx.reLaunch({
+                url: '/pages/index/index',
+              })
+              wx.showToast({
+                title: '授权过期，请重新登录',
+                icon: 'loading',
+                duration: 2000
+              })
             }
-            _this.setData({
-              commentData: _this.data.commentData,
-              Onefinger: _this.data.Onefinger
+            console.log(res.data);
+            wx.request({
+              url: app.globalData.globalIp + '/getPostDetail',
+              method: 'post',
+              header: { "Content-Type": "application/x-www-form-urlencoded" },
+              data: {
+                id: app.globalData.ofcommentId
+              },
+              success: function (res) {
+                console.log(res.data);
+                _this.data.commentData = [];
+                _this.setData({
+                  userData: res.data.post
+                })
+                var tem = res.data.post.comments;
+                _this.data.Onefinger.length = tem.length;
+                _this.data.Onefinger.fill(false);;
+                for (var i = 0; i < tem.length; i++) {
+                  for (var j = 0; j < tem[i].upvotes.length; j++) {
+                    if (tem[i].upvotes[j].user.userId == app.globalData.userId) {
+                      _this.data.Onefinger[i] = true;
+                    }
+                  }
+                  var c = { 'avatar': tem[i].user.avatar, 'name': tem[i].user.userName, 'id': i, 'upvoteLen': tem[i].upvotes.length, 'time': tem[i].ctime, 'audioLength': tem[i].audioLength, 'commentId': tem[i].commentId, 'audioPath': tem[i].audio, 'userId': tem[i].user.userId };
+                  _this.data.commentData.push(c);
+                }
+                _this.setData({
+                  commentData: _this.data.commentData,
+                  Onefinger: _this.data.Onefinger
+                })
+
+              }
             })
-            
+            wx.showToast({
+              title: '评论成功',
+              icon: 'success',
+              duration: 1000
+            })
+            _this.setData({
+              commentId: 0,
+              voiceOk: false
+            })
           }
-        })
-        wx.showToast({
-          title: '评论成功',
-          icon: 'success',
-          duration: 1000
-        })
-        _this.setData({
-          commentId: 0,
-          voiceOk:false
         })
       }
     })
+    
   },
   btnOnePlay:(e)=>{
-    _this.setData({onePlay:!_this.data.onePlay})
+    _this.setData({ onePlay: !_this.data.onePlay })
+    
+    
     if(_this.data.onePlay){
-      _this.innerAudioContext = wx.createInnerAudioContext();
-      _this.innerAudioContext.src = _this.data.gIp + _this.data.userData.postAudio; // 这里可以是录音的临时路径
-      _this.innerAudioContext.play()
-      _this.innerAudioContext.onEnded((res) => {
-        console.log('播放结束!');
-        _this.setData({ onePlay: !_this.data.onePlay })
-      })
+   //   const innerAudioContext = wx.createInnerAudioContext()
+      
+    //  innerAudioContext.src = _this.data.audioPath;
+      
+      innerAudioContext.src=_this.data.gIp+_this.data.userData.postAudio
+      /*innerAudioContext.onCanplay(() => {
+        innerAudioContext.duration //类似初始化-必须触发-不触发此函数延时也获取不到
+        setTimeout(function () {
+          //在这里就可以获取到大家梦寐以求的时长了
+          console.log(innerAudioContext.duration.toFixed(0));//延时获取长度 单位：秒
+          _this.setData({
+            audioLen: innerAudioContext.duration.toFixed(0)
+          })
+        }, 100)  //这里设置延时1秒获取
+      })*/
+      innerAudioContext.play()
+    }
+    else{
+      innerAudioContext.pause()
     }
   },
   // 生命周期函数--监听页面加载
@@ -295,6 +459,30 @@ Page({
     wx.setNavigationBarTitle({title: '动态详情'});
     _this.setData({
       gIp:app.globalData.globalIp
+    })
+    innerAudioContext.autoplay = false;
+    innerAudioContext.onEnded((res) => {
+      console.log('播放结束!');
+      wx.showToast({
+        title: '播放结束',
+        icon: "success",
+        duration: 1000
+      })
+      if(_this.data.onePlay){
+        _this.setData({
+          onePlay: !_this.data.onePlay,
+        })
+      }
+      
+      //    innerAudioContext.destroy()
+    })
+    innerAudioContext.onError((res) => {
+      console.log(res.errMsg)
+      console.log(res.errCode)
+      //    innerAudioContext.destroy()
+    })
+    innerAudioContext.onPlay((res) => {
+      console.log('播放开始!');
     })
   },
   clickred:function(e){
@@ -313,6 +501,17 @@ Page({
           postId: _this.data.userData.postId
         },
         success: function (res) {
+          if (res.data.status == 'TOKEN_EXPIRED') {
+            wx.setStorageSync('token', '')
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
+            wx.showToast({
+              title: '授权过期，请重新登录',
+              icon: 'loading',
+              duration: 2000
+            })
+          }
           console.log(res.data);
         }
       })
@@ -331,6 +530,17 @@ Page({
           postId: _this.data.userData.postId
         },
         success: function (res) {
+          if (res.data.status == 'TOKEN_EXPIRED') {
+            wx.setStorageSync('token', '')
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
+            wx.showToast({
+              title: '授权过期，请重新登录',
+              icon: 'loading',
+              duration: 2000
+            })
+          }
           console.log(res.data);
         }
       })
@@ -344,7 +554,6 @@ Page({
   onReady: function () {},
   // 生命周期函数--监听页面显示
   onShow: function () {
-    console.log(app.globalData.ofcommentId);
     
     wx.request({
       url: app.globalData.globalIp + '/getPostDetail',
@@ -369,9 +578,6 @@ Page({
         var tem = res.data.post.comments;
         _this.data.Onefinger.length = tem.length;
         _this.data.Onefinger.fill(false);
-        _this.data.audioPlay.length = tem.length;
-        _this.data.audioPlay.fill(false);
-        console.log(_this.data.Onefinger);
         for (var i = 0; i < tem.length;i++){
           for(var j=0;j<tem[i].upvotes.length;j++){
             if (tem[i].upvotes[j].user.userId==app.globalData.userId){
@@ -411,6 +617,17 @@ Page({
         audioLength: _this.data.userData.audioLength
       },
       success: function (res) {
+        if (res.data.status == 'TOKEN_EXPIRED') {
+          wx.setStorageSync('token', '')
+          wx.reLaunch({
+            url: '/pages/index/index',
+          })
+          wx.showToast({
+            title: '授权过期，请重新登录',
+            icon: 'loading',
+            duration: 2000
+          })
+        }
         console.log(res.data)
         wx.showToast({
           title: '转发成功',
@@ -424,7 +641,9 @@ Page({
   // 生命周期函数--监听页面隐藏
   onHide: function () {},
   // 生命周期函数--监听页面卸载
-  onUnload: function () {},
+  onUnload: function () {
+    innerAudioContext.stop();
+  },
   // 页面相关事件处理函数--监听用户下拉动作
   onPullDownRefresh: function () {},
   // 页面上拉触底事件的处理函数

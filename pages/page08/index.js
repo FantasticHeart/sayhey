@@ -12,8 +12,12 @@ Page({
     var temp = _this.data.fansData;
     temp.forEach((item, index) => {
       if (idx == index) {
-        app.globalData.ofuserId = temp[idx].userId;
+        app.globalData.fanId = temp[idx].userId;
+        wx.navigateTo({
+          url: '/pages/page12/index',
+        })
       }
+      
     })
 
   },
@@ -49,6 +53,7 @@ Page({
         _this.setData({
           fansData: _this.data.fansData
         })
+        console.log(_this.data.fansData)
       }
     })
   },

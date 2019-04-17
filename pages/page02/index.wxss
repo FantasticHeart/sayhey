@@ -1,1 +1,6 @@
 /* pages/page02/index.wxss */
+.replay{
+  position: relative;
+  left: 350rpx;
+  top:50rpx;
+}

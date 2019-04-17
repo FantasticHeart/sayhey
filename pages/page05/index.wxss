@@ -1,1 +1,7 @@
 /* pages/page05/index.wxss */
+.deTxt{
+  word-break: break-all;
+}
+.btn-voice{
+  width: 400rpx
+}

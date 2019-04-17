@@ -5,13 +5,10 @@ const innerAudioContext = wx.createInnerAudioContext();
 Page({
   // 页面的初始数据
   data: {
-    focus:false,
-    onePlay:false,
-    userData:{},
-    postData:[],
-    gIp:'',
-    onePlay:[],
-    isred:[],
+    onePlay: [],
+    isred: [],
+    postData: [],
+    gIp: '',
     imgwidth: [],
     imgheight: []
   },
@@ -30,23 +27,51 @@ Page({
       imgheight: _this.data.imgheight
     })
   },
-  clickPost:function(){
-    app.globalData.ofuserId=_this.data.userData.userId;
-    wx.navigateTo({
-      url: '/pages/page04/index',
+  delete:function(e){
+    var idx=e.currentTarget.dataset.id;
+    wx.showModal({
+      title: '提示',
+      content: '确定删除吗',
+      success: function (res) {
+        if (res.confirm) {
+          wx.request({
+            url: app.globalData.globalIp + '/deletePost',
+            method: 'post',
+            header: {
+              'content-type': 'application/x-www-form-urlencoded',
+              "Authorization": app.globalData.token
+            },
+            data: {
+              userId: app.globalData.userId,
+              postId: _this.data.postData[idx].postId
+            },
+            success: function (res) {
+              console.log(res.data);
+              _this.onShow();
+            }
+          })
+        }
+      }
     })
+    
   },
-  clickFocus: function () {
-    app.globalData.ofuserId = _this.data.userData.userId;
+  clickOwn: function (e) {
+
     wx.navigateTo({
-      url: '/pages/page06/index',
+      url: '/pages/page07/index',
     })
+
+
   },
-  clickFans: function () {
-    app.globalData.ofuserId = _this.data.userData.userId;
+  clickDetail: function (e) {
+    innerAudioContext.stop()
+    var idx = e.currentTarget.dataset.id;
+    app.globalData.ofcommentId = _this.data.postData[idx].postId;
+
     wx.navigateTo({
-      url: '/pages/page08/index',
+      url: '/pages/page05/index',
     })
+
   },
   clickred: (e) => {
     var idx = e.currentTarget.dataset.id;
@@ -120,75 +145,6 @@ Page({
     })
 
   },
-  clickDetail: function (e) {
-    innerAudioContext.stop()
-    var idx = e.currentTarget.dataset.id;
-    app.globalData.ofcommentId = _this.data.postData[idx].postId;
-
-    wx.navigateTo({
-      url: '/pages/page05/index',
-    })
-
-  },
-  btnFocus:(e)=>{
-    _this.setData({focus:!_this.data.focus})
-    if (_this.data.focus){
-      wx.request({
-        url: app.globalData.globalIp + '/addFocusUser',
-        method: 'post',
-        header: {
-          'content-type': 'application/x-www-form-urlencoded',
-          "Authorization": app.globalData.token
-        },
-        data: {
-          fromUserId: app.globalData.userId,
-          toUserId: _this.data.userData.userId
-        },
-        success: function (res) {
-          if (res.data.status == 'TOKEN_EXPIRED') {
-            wx.setStorageSync('token', '')
-            wx.reLaunch({
-              url: '/pages/index/index',
-            })
-            wx.showToast({
-              title: '授权过期，请重新登录',
-              icon: 'loading',
-              duration: 2000
-            })
-          }
-          console.log(res.data);
-        }
-      })
-    }
-    else{
-      wx.request({
-        url: app.globalData.globalIp + '/cancelFocusUser',
-        method: 'post',
-        header: {
-          'content-type': 'application/x-www-form-urlencoded',
-          "Authorization": app.globalData.token
-        },
-        data: {
-          fromUserId: app.globalData.userId,
-          toUserId: _this.data.userData.userId
-        },
-        success: function (res) {
-          if (res.data.status == 'TOKEN_EXPIRED') {
-            wx.setStorageSync('token', '')
-            wx.reLaunch({
-              url: '/pages/index/index',
-            })
-            wx.showToast({
-              title: '授权过期，请重新登录',
-              icon: 'loading',
-              duration: 2000
-            })
-          }
-          console.log(res.data);
-        }
-      })
-    }
-  },
   btnOnePlay: (e) => {
     var idx = e.currentTarget.dataset.id;
     var temPlay = _this.data.onePlay;
@@ -219,18 +175,17 @@ Page({
   },
   // 生命周期函数--监听页面加载
   onLoad: function (options) {
-    _this=this;
-    wx.setNavigationBarTitle({title: '他的主页'});
-    _this.setData({
+    _this = this;
+    wx.setNavigationBarTitle({ title: '我的动态' });
+    this.setData({
       gIp: app.globalData.globalIp
     })
   },
   // 生命周期函数--监听页面初次渲染完成
-  onReady: function () {},
+  onReady: function () { },
   // 生命周期函数--监听页面显示
   onShow: function () {
-    _this.data.userData={};
-    _this.data.postData=[];
+    _this.data.postData = [];
     wx.request({
       url: app.globalData.globalIp + '/getPostsByUserId',
       method: 'post',
@@ -242,79 +197,45 @@ Page({
       },
       success: function (res) {
         console.log(res.data);
-        var tem=res.data.posts;
+        var tem = res.data.posts;
         _this.data.onePlay.length = tem.length
         _this.data.onePlay.fill(false)
         _this.data.isred.length = tem.length
         _this.data.isred.fill(false)
         _this.data.imgwidth.length = tem.length
-        _this.data.imgwidth.fill(0)
+     //   _this.data.imgwidth.fill(0)
         _this.data.imgheight.length = tem.length
-        _this.data.imgheight.fill(0)
+     //   _this.data.imgheight.fill(0)
 
-        for(var i=0;i<tem.length;i++){
+        for (var i = 0; i < tem.length; i++) {
           for (var j = 0; j < tem[i].upvotes.length; j++) {
             if (tem[i].upvotes[j].user.userId == app.globalData.userId) {
               _this.data.isred[i] = true;
             }
           }
-          var p={'avatar':tem[i].user.avatar,'dataId':i,'name':tem[i].user.userName,'title':tem[i].postTitle,'time':tem[i].ctime,'content':tem[i].postContent,'imgPath':tem[i].postImg,'audioTime':tem[i].audioLength,'comment':tem[i].commentNum,'upvoteNum':tem[i].upvoteNum,'postId':tem[i].postId,'audioPath':tem[i].postAudio};
+          var p = { 'avatar': tem[i].user.avatar, 'dataId': i, 'name': tem[i].user.userName, 'title': tem[i].postTitle, 'time': tem[i].ctime, 'content': tem[i].postContent, 'imgPath': tem[i].postImg, 'audioTime': tem[i].audioLength, 'comment': tem[i].commentNum, 'upvoteNum': tem[i].upvoteNum, 'postId': tem[i].postId, 'audioPath': tem[i].postAudio };
           _this.data.postData.push(p);
         }
         _this.setData({
           postData: _this.data.postData,
-          onePlay:_this.data.onePlay,
-          isred:_this.data.isred
+          onePlay: _this.data.onePlay,
+          isred: _this.data.isred
         })
-        wx.request({
-          url: app.globalData.globalIp + '/getUserDetail',
-          method: 'post',
-          header: {
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          data: {
-            userId: app.globalData.ofuserId
-          },
-          success: function (res) {
-            console.log(res.data);
-            _this.setData({
-              userData: res.data.user,
-            })
-            wx.request({
-              url: app.globalData.globalIp + '/getRelationship',
-            method: 'post',
-              header: {
-                'content-type': 'application/x-www-form-urlencoded'
-              },
-              data: {
-                fromUserId: app.globalData.userId,
-                toUserId: _this.data.userData.userId
-              },
-              success: function (res) {
-                console.log(res.data);
-                if (res.data.relationship!=null){
-                  _this.setData({
-                    focus:true
-                  })
-                }
-              }
-            })
-          }
-        })
-        
+
+
       }
     })
   },
   // 生命周期函数--监听页面隐藏
-  onHide: function () {},
+  onHide: function () { },
   // 生命周期函数--监听页面卸载
-  onUnload: function () {
-   innerAudioContext.stop();
+  onUnload: function () { 
+    innerAudioContext.stop()
   },
   // 页面相关事件处理函数--监听用户下拉动作
-  onPullDownRefresh: function () {},
+  onPullDownRefresh: function () { },
   // 页面上拉触底事件的处理函数
-  onReachBottom: function () {},
+  onReachBottom: function () { },
   // 用户点击右上角分享
-  onShareAppMessage: function () {}
+  onShareAppMessage: function () { }
 })

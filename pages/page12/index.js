@@ -5,13 +5,13 @@ const innerAudioContext = wx.createInnerAudioContext();
 Page({
   // 页面的初始数据
   data: {
-    focus:false,
-    onePlay:false,
-    userData:{},
-    postData:[],
-    gIp:'',
-    onePlay:[],
-    isred:[],
+    focus: false,
+    onePlay: false,
+    userData: {},
+    postData: [],
+    gIp: '',
+    onePlay: [],
+    isred: [],
     imgwidth: [],
     imgheight: []
   },
@@ -30,8 +30,8 @@ Page({
       imgheight: _this.data.imgheight
     })
   },
-  clickPost:function(){
-    app.globalData.ofuserId=_this.data.userData.userId;
+  clickPost: function () {
+    app.globalData.ofuserId = _this.data.userData.userId;
     wx.navigateTo({
       url: '/pages/page04/index',
     })
@@ -130,9 +130,9 @@ Page({
     })
 
   },
-  btnFocus:(e)=>{
-    _this.setData({focus:!_this.data.focus})
-    if (_this.data.focus){
+  btnFocus: (e) => {
+    _this.setData({ focus: !_this.data.focus })
+    if (_this.data.focus) {
       wx.request({
         url: app.globalData.globalIp + '/addFocusUser',
         method: 'post',
@@ -160,7 +160,7 @@ Page({
         }
       })
     }
-    else{
+    else {
       wx.request({
         url: app.globalData.globalIp + '/cancelFocusUser',
         method: 'post',
@@ -219,18 +219,18 @@ Page({
   },
   // 生命周期函数--监听页面加载
   onLoad: function (options) {
-    _this=this;
-    wx.setNavigationBarTitle({title: '他的主页'});
+    _this = this;
+    wx.setNavigationBarTitle({ title: '他的主页' });
     _this.setData({
       gIp: app.globalData.globalIp
     })
   },
   // 生命周期函数--监听页面初次渲染完成
-  onReady: function () {},
+  onReady: function () { },
   // 生命周期函数--监听页面显示
   onShow: function () {
-    _this.data.userData={};
-    _this.data.postData=[];
+    _this.data.userData = {};
+    _this.data.postData = [];
     wx.request({
       url: app.globalData.globalIp + '/getPostsByUserId',
       method: 'post',
@@ -238,11 +238,11 @@ Page({
         'content-type': 'application/x-www-form-urlencoded'
       },
       data: {
-        id: app.globalData.ofuserId
+        id: app.globalData.fanId
       },
       success: function (res) {
         console.log(res.data);
-        var tem=res.data.posts;
+        var tem = res.data.posts;
         _this.data.onePlay.length = tem.length
         _this.data.onePlay.fill(false)
         _this.data.isred.length = tem.length
@@ -252,19 +252,19 @@ Page({
         _this.data.imgheight.length = tem.length
         _this.data.imgheight.fill(0)
 
-        for(var i=0;i<tem.length;i++){
+        for (var i = 0; i < tem.length; i++) {
           for (var j = 0; j < tem[i].upvotes.length; j++) {
             if (tem[i].upvotes[j].user.userId == app.globalData.userId) {
               _this.data.isred[i] = true;
             }
           }
-          var p={'avatar':tem[i].user.avatar,'dataId':i,'name':tem[i].user.userName,'title':tem[i].postTitle,'time':tem[i].ctime,'content':tem[i].postContent,'imgPath':tem[i].postImg,'audioTime':tem[i].audioLength,'comment':tem[i].commentNum,'upvoteNum':tem[i].upvoteNum,'postId':tem[i].postId,'audioPath':tem[i].postAudio};
+          var p = { 'avatar': tem[i].user.avatar, 'dataId': i, 'name': tem[i].user.userName, 'title': tem[i].postTitle, 'time': tem[i].ctime, 'content': tem[i].postContent, 'imgPath': tem[i].postImg, 'audioTime': tem[i].audioLength, 'comment': tem[i].commentNum, 'upvoteNum': tem[i].upvoteNum, 'postId': tem[i].postId, 'audioPath': tem[i].postAudio };
           _this.data.postData.push(p);
         }
         _this.setData({
           postData: _this.data.postData,
-          onePlay:_this.data.onePlay,
-          isred:_this.data.isred
+          onePlay: _this.data.onePlay,
+          isred: _this.data.isred
         })
         wx.request({
           url: app.globalData.globalIp + '/getUserDetail',
@@ -273,7 +273,7 @@ Page({
             'content-type': 'application/x-www-form-urlencoded'
           },
           data: {
-            userId: app.globalData.ofuserId
+            userId: app.globalData.fanId
           },
           success: function (res) {
             console.log(res.data);
@@ -282,7 +282,7 @@ Page({
             })
             wx.request({
               url: app.globalData.globalIp + '/getRelationship',
-            method: 'post',
+              method: 'post',
               header: {
                 'content-type': 'application/x-www-form-urlencoded'
               },
@@ -292,29 +292,29 @@ Page({
               },
               success: function (res) {
                 console.log(res.data);
-                if (res.data.relationship!=null){
+                if (res.data.relationship != null) {
                   _this.setData({
-                    focus:true
+                    focus: true
                   })
                 }
               }
             })
           }
         })
-        
+
       }
     })
   },
   // 生命周期函数--监听页面隐藏
-  onHide: function () {},
+  onHide: function () { },
   // 生命周期函数--监听页面卸载
   onUnload: function () {
-   innerAudioContext.stop();
+    innerAudioContext.stop()
   },
   // 页面相关事件处理函数--监听用户下拉动作
-  onPullDownRefresh: function () {},
+  onPullDownRefresh: function () { },
   // 页面上拉触底事件的处理函数
-  onReachBottom: function () {},
+  onReachBottom: function () { },
   // 用户点击右上角分享
-  onShareAppMessage: function () {}
+  onShareAppMessage: function () { }
 })
