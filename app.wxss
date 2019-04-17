@@ -5,6 +5,7 @@
 }
 .nick-name{
   font-weight: bolder;
+  font-size: 28rpx;
 }
 .imgsize{
   display: flex;
@@ -121,11 +122,11 @@ input { border: #d3d3d3 1px solid; height: 80rpx; border-radius: 10rpx; width: 1
 
 .g-cardItem .txt2 { font-size: 20rpx; color: #999; margin-top: 10rpx; }
 
-.g-cardItem .tag { font-size: 20rpx; padding: 0 10rpx; line-height: 32rpx; color: #fff; margin-left: 10rpx; background-color: #ca2222; }
+.g-cardItem .tag { font-size: 28rpx; padding: 0 10rpx; line-height: 32rpx; color: #fff; margin-left: 10rpx; background-color: #ca2222; }
 
-.g-cardItem .article { font-size: 28rpx; line-height: 1.5em; text-align-last: auto; padding: 0 30rpx; }
+.g-cardItem .article { font-size: 29rpx; line-height: 1.5em; text-align-last: auto; padding: 0 30rpx; }
 
-.g-cardItem .article > view:first-child { text-indent: 2em; }
+.g-cardItem .article > view:first-child { text-indent: 0 em; }
 
 .g-cardItem .audio-box { padding: 20rpx 30rpx; position: relative; }
 
