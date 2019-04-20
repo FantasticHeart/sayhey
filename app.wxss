@@ -1,4 +1,11 @@
 @charset "UTF-8";
+.dele{
+  float:right;
+  width: 25px;
+  height: 30px;
+  position: relative;
+  top: -42px;
+}
 .icon{
   width: 50rpx;
   height: 50rpx
