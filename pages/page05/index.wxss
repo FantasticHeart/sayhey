@@ -5,3 +5,15 @@
 .btn-voice{
   width: 400rpx
 }
+.comSort{
+  position: relative;
+  top: -80rpx;
+  left: 150rpx
+}
+.tran{
+  position: relative;
+  top: 10rpx;
+  left: 10rpx;
+  width: 50rpx;
+  height: 50rpx;
+}

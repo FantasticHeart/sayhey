@@ -24,6 +24,75 @@ Page({
     isupload:false,   //是否上传音频
     isplay:false   //是否在回放
 },
+  getPhoneNumber(e) {
+    console.log(e.detail.errMsg)
+    console.log(e.detail.iv)
+    console.log(e.detail.encryptedData)
+  },
+init:function(){
+  _this.setData({
+    titleareaValue: '',
+    titleNumber: 0,
+    btnLoad: true,
+    textareaValue: '',
+    textNumber: 0,
+    uploadFilePaths: [],
+    audioPath: '',
+    voiceStatus: 1,
+    isVoice: false,
+    userId: 0,
+    postTitle: '',
+    postContent: '',
+    postAudio: '',
+    postImg: '',
+    audioLength: 0,
+    times: 0,
+    isupload: false,
+    isplay: false
+  })
+},
+submitRequest:function(){
+
+  wx.request({
+    url: app.globalData.globalIp + '/addPost',
+    method: 'post',
+    header: {
+      'content-type': 'application/x-www-form-urlencoded',
+      "Authorization": app.globalData.token
+    },
+    data: {
+      userId: app.globalData.userId,
+      postTitle: _this.data.titleareaValue,
+      postContent: _this.data.textareaValue,
+      postAudio: _this.data.postAudio,
+      postImg: _this.data.postImg,
+      audioLength: _this.data.audioLength
+    },
+    success: function (res) {
+      console.log(res.data)
+      if (res.data.status == 'TOKEN_EXPIRED') {
+        wx.setStorageSync('token', '')
+        wx.reLaunch({
+          url: '/pages/index/index',
+        })
+        wx.showToast({
+          title: '授权过期',
+          icon: 'loading',
+          duration: 2000
+        })
+      }
+      wx.switchTab({
+        url: '/pages/page01/index',
+      })
+      wx.showToast({
+        title: "发布成功",
+        icon: "",//仅支持success或者loading
+        duration: 1000
+      });
+
+    }
+  })
+},
 play:function(){   //回放播放
   innerAudioContext.src = _this.data.audioPath; // 这里是录音的临时路径
  _this.setData({
@@ -44,26 +113,7 @@ back:function(){          //左上角返回按钮
       success: function (res) {
         if (res.confirm) {
           innerAudioContext.stop();
-          _this.setData({
-            titleareaValue: '',
-            titleNumber: 0,
-            btnLoad: true,
-            textareaValue: '',
-            textNumber: 0,
-            uploadFilePaths: [],
-            audioPath: '',
-            voiceStatus: 1,
-            isVoice: false,
-            userId: 0,
-            postTitle: '',
-            postContent: '',
-            postAudio: '',
-            postImg: '',
-            audioLength: 0,
-            times: 0,
-            isupload: false,
-            isplay: false
-          })
+          _this.init()
           app.globalData.title = '';
           app.globalData.content = '';
           wx.switchTab({
@@ -75,26 +125,7 @@ back:function(){          //左上角返回按钮
   }
   else if (!_this.data.isVoice && _this.data.voiceStatus != 2){
     innerAudioContext.stop();
-    _this.setData({
-      titleareaValue: '',
-      titleNumber: 0,
-      btnLoad: true,
-      textareaValue: '',
-      textNumber: 0,
-      uploadFilePaths: [],
-      audioPath: '',
-      voiceStatus: 1,
-      isVoice: false,
-      userId: 0,
-      postTitle: '',
-      postContent: '',
-      postAudio: '',
-      postImg: '',
-      audioLength: 0,
-      times: 0,
-      isupload: false,
-      isplay: false
-    })
+    _this.init()
     app.globalData.title = '';
     app.globalData.content = '';
     
@@ -206,18 +237,27 @@ btnUpload:function(e){       //上传照片
   const _this=this;
   wx.chooseImage({
     count: 1,
-    sizeType: ['original', 'compressed'],
+    sizeType: ['original','compressed'],
     sourceType: ['album', 'camera'],
     success: function(res) {
-      _this.data.btnLoad = false;
-      _this.setData({ btnLoad: _this.data.btnLoad });
-      let tempFilePaths = _this.data.uploadFilePaths
-      let tempUpload=res.tempFilePaths
-      tempUpload.forEach(function(item,index){
-        tempFilePaths.push(item)
-      })
-      _this.setData({uploadFilePaths:tempFilePaths})
-      console.log(_this.data.uploadFilePaths.length)
+      let tempFilesSize = res.tempFiles[0].size;
+      if (tempFilesSize > 5242880) {
+        wx.showToast({ 
+          title: '上传图片不能大于5M!',                                 
+          icon:'none',
+          duration:2000       
+          })                        
+      }
+      else{
+        _this.data.btnLoad = false;
+        _this.setData({ btnLoad: _this.data.btnLoad });
+        let tempFilePaths = _this.data.uploadFilePaths
+        let tempUpload = res.tempFilePaths
+        tempUpload.forEach(function (item, index) {
+          tempFilePaths.push(item)
+        })
+        _this.setData({ uploadFilePaths: tempFilePaths })
+      } 
     }
   })
 },
@@ -266,14 +306,14 @@ btnDelete:function(e){         //删除照片
     if (_this.data.audioPath == ''){
       wx.showToast({
         title: '请录音！',
-        icon: 'loading',
+        icon: 'none',
         duration: 1000
       })
     }
     else if (_this.data.postAudio == ''){
       wx.showToast({
         title: '请上传录音！',
-        icon: 'loading',
+        icon: 'none',
         duration: 1000
       })
     }
@@ -292,6 +332,7 @@ btnDelete:function(e){         //删除照片
             type: 'img'
           },
           success: function (res) {
+            console.log(res.data);
             if (res.data.status == 'TOKEN_EXPIRED') {
               wx.setStorageSync('token', '')
               wx.reLaunch({
@@ -310,65 +351,7 @@ btnDelete:function(e){         //删除照片
                     titleareaValue: 'sayhey'
                   })
                 }
-                
-                wx.request({
-                  url: app.globalData.globalIp + '/addPost',
-                  method: 'post',
-                  header: {
-                    'content-type': 'application/x-www-form-urlencoded',
-                    "Authorization": app.globalData.token
-                  },         
-                  data: {
-                    userId: app.globalData.userId,
-                    postTitle: _this.data.titleareaValue,
-                    postContent: _this.data.textareaValue,
-                    postAudio: _this.data.postAudio,
-                    postImg: _this.data.postImg,
-                    audioLength: _this.data.audioLength
-                  },
-                  success: function (res) {
-                    console.log(res.data)
-                    if(res.data.status=='TOKEN_EXPIRED'){
-                      wx.setStorageSync('token', '')
-                      wx.reLaunch({
-                        url: '/pages/index/index',
-                      })
-                      wx.showToast({
-                        title: '授权过期',
-                        icon:'loading',
-                        duration:2000
-                      })  
-                    }
-                    wx.switchTab({
-                      url: '/pages/page01/index',
-                    })
-                    wx.showToast({
-                      title: "发布成功",
-                      icon: "",//仅支持success或者loading
-                      duration: 1000
-                    });
-                    _this.setData({
-                      titleareaValue: '',
-                      titleNumber: 0,
-                      btnLoad: true,
-                      textareaValue: '',
-                      textNumber: 0,
-                      uploadFilePaths: [],
-                      audioPath: '',
-                      voiceStatus: 1,        
-                      isVoice: false,
-                      userId: 0,
-                      postTitle: '',
-                      postContent: '',
-                      postAudio: '',
-                      postImg: '',
-                      audioLength: 0,
-                      times: 0,
-                      isupload: false,
-                      isplay: false
-                    })
-                  }
-                })
+                _this.submitRequest();
           }
         })
       }
@@ -378,64 +361,7 @@ btnDelete:function(e){         //删除照片
             titleareaValue: 'sayhey'
           })
         }
-            wx.request({
-              url: app.globalData.globalIp + '/addPost',
-              method: 'post',
-              header: {
-                'content-type': 'application/x-www-form-urlencoded',
-                "Authorization": app.globalData.token
-              },
-              data: {
-                userId: app.globalData.userId,
-                postTitle: _this.data.titleareaValue,
-                postContent: _this.data.textareaValue,
-                postAudio: _this.data.postAudio,
-                postImg: _this.data.postImg,
-                audioLength: _this.data.audioLength
-              },
-              success: function (res) {
-                if (res.data.status == 'TOKEN_EXPIRED') {
-                  wx.setStorageSync('token', '')
-                  wx.reLaunch({
-                    url: '/pages/index/index',
-                  })
-                  wx.showToast({
-                    title: '授权过期，请重新登录',
-                    icon: 'loading',
-                    duration: 2000
-                  })        
-                }
-                wx.switchTab({
-                  url: '/pages/page01/index',
-                })
-                wx.showToast({
-                  title: "发布成功",
-                  icon: "",//仅支持success或者loading
-                  duration: 1000
-                });
-                console.log(res.data)
-                _this.setData({
-                  titleareaValue: '',
-                  titleNumber: 0,
-                  btnLoad: true,
-                  textareaValue: '',
-                  textNumber: 0,
-                  uploadFilePaths: [],
-                  audioPath: '',
-                  voiceStatus: 1,        
-                  isVoice: false,
-                  userId: 0,
-                  postTitle: '',
-                  postContent: '',
-                  postAudio: '',
-                  postImg: '',
-                  audioLength: 0,
-                  times: 0,
-                  isupload: false,
-                  isplay: false
-                })
-              }
-            })
+            _this.submitRequest();
       }    
     }
   },
@@ -484,11 +410,11 @@ btnDelete:function(e){         //删除照片
   },
   // 生命周期函数--监听页面初次渲染完成
   onReady: function () {
-   
+    wx.hideTabBar();
   },
   // 生命周期函数--监听页面显示
   onShow: function () {
-    
+    wx.hideTabBar();
    // if(_this.data.uploadFilePaths.length!=0){
    // }
   },
@@ -497,26 +423,7 @@ btnDelete:function(e){         //删除照片
   // 生命周期函数--监听页面卸载
   onUnload: function () {
     innerAudioContext.stop();
-    _this.setData({
-      titleareaValue: '',
-      titleNumber: 0,
-      btnLoad: true,
-      textareaValue: '',
-      textNumber: 0,
-      uploadFilePaths: [],
-      audioPath: '',
-      voiceStatus: 1,
-      isVoice: false,
-      userId: 0,
-      postTitle: '',
-      postContent: '',
-      postAudio: '',
-      postImg: '',
-      audioLength: 0,
-      times: 0,
-      isupload: false,
-      isplay: false
-    })
+    _this.init()
     app.globalData.title = '';
     app.globalData.content = '';
   },

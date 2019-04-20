@@ -36,7 +36,13 @@
 	</view>
 
 	<view class="g-discussList">
-		<view class="title">评论</view>
+		<view class="title">评论
+    <image src="/images/tran.png" class='tran' bindtap='switchTo'></image>
+    <view wx:if='{{istime}}' class="comSort">按评论时间排序</view>
+    <view wx:else class="comSort">按评论热度排序</view>
+    </view>
+    
+    
 		<view class="item" wx:for="{{commentData}}" wx:key="item">
 			<view class="userInfo">
 				<image src="{{item.avatar}}" class="face" mode="widthFix" bindtap='cliclDisc' data-id='{{item.id}}'></image>

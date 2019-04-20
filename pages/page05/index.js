@@ -6,6 +6,8 @@ let _this;
 Page({
   // 页面的初始数据
   data: {
+    type:'time',
+    istime:true,
     isplay:false,
     voice:0,
     voiceOk:false,  //录音完成
@@ -23,6 +25,12 @@ Page({
     imgwidth: 0,
     imgheight: 0
   },
+  switchTo:function(){
+    _this.setData({
+      istime:!_this.data.istime,
+    })
+    _this.detailRequest();
+  },
   cancel:function(){
     wx.showModal({
       title: '提示',
@@ -38,6 +46,45 @@ Page({
       }
     })
     
+  },
+  detailRequest:function(){
+    if(_this.data.istime){
+      _this.data.type='time';
+    }
+    else{
+      _this.data.type='popular';
+    }
+    _this.data.commentData=[]
+    wx.request({
+      url: app.globalData.globalIp + '/getCommentsByPostId',
+      method: 'post',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+        postId: app.globalData.ofcommentId,
+        type: _this.data.type
+      },
+      success: function (res) {
+        console.log(res.data);
+        var tem = res.data.comments;
+        _this.data.Onefinger.length = tem.length;
+        _this.data.Onefinger.fill(false);;
+        for (var i = 0; i < tem.length; i++) {
+          for (var j = 0; j < tem[i].upvotes.length; j++) {
+            if (tem[i].upvotes[j].user.userId == app.globalData.userId) {
+              _this.data.Onefinger[i] = true;
+            }
+          }
+          var c = { 'avatar': tem[i].user.avatar, 'name': tem[i].user.userName, 'id': i, 'upvoteLen': tem[i].upvotes.length, 'time': tem[i].ctime, 'audioLength': tem[i].audioLength, 'commentId': tem[i].commentId, 'audioPath': tem[i].audio, 'userId': tem[i].user.userId };
+          _this.data.commentData.push(c);
+        }
+        _this.setData({
+          commentData: _this.data.commentData,
+          Onefinger: _this.data.Onefinger
+        })
+      }
+    })
   },
   imageLoad: function (e) {
     
@@ -69,7 +116,7 @@ Page({
     })
     if (_this.data.iscollected){
       wx.request({
-        url: app.globalData.globalIp + '//addStore',
+        url: app.globalData.globalIp + '/addStore',
         method: 'post',
         header: {
           'content-type': 'application/x-www-form-urlencoded',
@@ -278,36 +325,7 @@ Page({
         recorderManager.stop()
     }
     else if (num == 2 && _this.data.voiceOk){
-   //   const innerAudioContext = wx.createInnerAudioContext()
-   //   innerAudioContext.autoplay = false;
-   //   innerAudioContext.src = _this.data.audioPath;
-    /*  innerAudioContext.onEnded((res) => {
-        console.log('播放结束!');
-        wx.showToast({
-          title: '播放结束',
-          icon: "success",
-          duration: 1000
-        })
-        innerAudioContext.destroy()
-      })
-      innerAudioContext.onError((res) => {
-        console.log(res.errMsg)
-        console.log(res.errCode)
-        innerAudioContext.destroy()
-      })
-      innerAudioContext.onPlay((res) => {
-        console.log('播放开始!');
-      })
-      innerAudioContext.onCanplay(() => {
-        innerAudioContext.duration //类似初始化-必须触发-不触发此函数延时也获取不到
-        setTimeout(function () {
-          //在这里就可以获取到大家梦寐以求的时长了
-          console.log(innerAudioContext.duration.toFixed(0));//延时获取长度 单位：秒
-          _this.setData({
-            audioLen: innerAudioContext.duration.toFixed(0)
-          })
-        }, 100)  //这里设置延时1秒获取
-      })*/
+   
       _this.setData({
         onePlay: false
       })
@@ -380,38 +398,7 @@ Page({
               })
             }
             console.log(res.data);
-            wx.request({
-              url: app.globalData.globalIp + '/getPostDetail',
-              method: 'post',
-              header: { "Content-Type": "application/x-www-form-urlencoded" },
-              data: {
-                id: app.globalData.ofcommentId
-              },
-              success: function (res) {
-                console.log(res.data);
-                _this.data.commentData = [];
-                _this.setData({
-                  userData: res.data.post
-                })
-                var tem = res.data.post.comments;
-                _this.data.Onefinger.length = tem.length;
-                _this.data.Onefinger.fill(false);;
-                for (var i = 0; i < tem.length; i++) {
-                  for (var j = 0; j < tem[i].upvotes.length; j++) {
-                    if (tem[i].upvotes[j].user.userId == app.globalData.userId) {
-                      _this.data.Onefinger[i] = true;
-                    }
-                  }
-                  var c = { 'avatar': tem[i].user.avatar, 'name': tem[i].user.userName, 'id': i, 'upvoteLen': tem[i].upvotes.length, 'time': tem[i].ctime, 'audioLength': tem[i].audioLength, 'commentId': tem[i].commentId, 'audioPath': tem[i].audio, 'userId': tem[i].user.userId };
-                  _this.data.commentData.push(c);
-                }
-                _this.setData({
-                  commentData: _this.data.commentData,
-                  Onefinger: _this.data.Onefinger
-                })
-
-              }
-            })
+            _this.detailRequest();
             wx.showToast({
               title: '评论成功',
               icon: 'success',
@@ -432,21 +419,6 @@ Page({
     
     
     if(_this.data.onePlay){
-   //   const innerAudioContext = wx.createInnerAudioContext()
-      
-    //  innerAudioContext.src = _this.data.audioPath;
-      
-      innerAudioContext.src=_this.data.gIp+_this.data.userData.postAudio
-      /*innerAudioContext.onCanplay(() => {
-        innerAudioContext.duration //类似初始化-必须触发-不触发此函数延时也获取不到
-        setTimeout(function () {
-          //在这里就可以获取到大家梦寐以求的时长了
-          console.log(innerAudioContext.duration.toFixed(0));//延时获取长度 单位：秒
-          _this.setData({
-            audioLen: innerAudioContext.duration.toFixed(0)
-          })
-        }, 100)  //这里设置延时1秒获取
-      })*/
       innerAudioContext.play()
     }
     else{
@@ -554,7 +526,6 @@ Page({
   onReady: function () {},
   // 生命周期函数--监听页面显示
   onShow: function () {
-    
     wx.request({
       url: app.globalData.globalIp + '/getPostDetail',
       method: 'post',
@@ -565,40 +536,12 @@ Page({
       success: function (res) {
         console.log(res.data);
         _this.data.commentData = [];
-        for (var i = 0; i < res.data.post.upvotes.length;i++){
-          if (res.data.post.upvotes[i].user.userId==app.globalData.userId){
-            _this.data.isred=true;
-          }
-        }
-        for (var i = 0; i < res.data.post.stores.length; i++) {
-          if (res.data.post.stores[i].userId == app.globalData.userId) {
-            _this.data.iscollected = true;
-          }
-        }
-        var tem = res.data.post.comments;
-        _this.data.Onefinger.length = tem.length;
-        _this.data.Onefinger.fill(false);
-        for (var i = 0; i < tem.length;i++){
-          for(var j=0;j<tem[i].upvotes.length;j++){
-            if (tem[i].upvotes[j].user.userId==app.globalData.userId){
-              _this.data.Onefinger[i]=true;
-            }
-          }
-          var c = { 'avatar': tem[i].user.avatar, 'name': tem[i].user.userName, 'id': i, 'upvoteLen': tem[i].upvotes.length, 'time': tem[i].ctime, 'audioLength': tem[i].audioLength, 'commentId': tem[i].commentId, 'audioPath': tem[i].audio, 'userId': tem[i].user.userId};
-          _this.data.commentData.push(c);
-          
-        }
         _this.setData({
-          commentId:0,
-          commentData: _this.data.commentData,
-          userData:res.data.post,
-          isred:_this.data.isred,
-          iscollected: _this.data.iscollected,
-          Onefinger: _this.data.Onefinger
+          userData: res.data.post
         })
-
       }
     })
+    _this.detailRequest();
   },
   forward:function(){
     wx.request({

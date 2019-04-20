@@ -2,16 +2,16 @@
 <scroll-view scroll-x="true" class="tab-h" scroll-left="{{scrollLeft}}">
 	<view class="g-tabHeader">
   
-  <view style='margin-left:20rpx' class="item {{currentTab==0?'on':''}}"  bindtap="btnTabSwitch" data-current="0">发现</view>
-		<view class="item {{currentTab==1?'on':''}}"  bindtap="btnTabSwitch" data-current="1">关注</view>
-		<view style='margin-right:20rpx' class="item {{currentTab==2?'on':''}}"  bindtap="btnTabSwitch" data-current="2">话题</view>
+  <view style='margin-left:20rpx' class="item {{currentTab==0?'on':''}}"  bindtap="btnTabSwitch" data-current="0">推荐</view>
+		<view class="item {{currentTab==1?'on':''}}"  bindtap="btnTabSwitch" data-current="1">最新</view>
+		<view style='margin-right:20rpx' class="item {{currentTab==2?'on':''}}"  bindtap="btnTabSwitch" data-current="2">发现</view>
   
 		
 	</view>
   </scroll-view>
   <swiper class="tab-content" current="{{currentTab}}" duration="300" bindchange="switchTab" style="height:{{winHeight}}rpx">
         <swiper-item>
-            <scroll-view scroll-y="true" class="scoll-h"  bindscrolltolower='refresh'>
+            <scroll-view scroll-y="true" class="scoll-h">
                 <view class="list" wx:for="{{userData}}" wx:key="item">
    			<view class="g-cardItem">
 				<view class="userInfo">
@@ -52,14 +52,15 @@
             
         </swiper-item>
         <swiper-item>
-            <scroll-view scroll-y="true" class="scoll-h" >
-                <view class="list" wx:for="{{focusData}}" wx:key="item">
+            <scroll-view scroll-y="true" class="scoll-h" bindscrolltolower='refresh'>
+                <view class="list" wx:for="{{latestData}}" wx:key="item">
    			<view class="g-cardItem">
 				<view class="userInfo">
-					<image src="{{item.avatar}}" class="face" mode="widthFix"></image>
-					<view class="r" bindtap='clickDetail' data-id='{{item.dataId}}'>
+					<image src="{{item.avatar}}" class="face" mode="widthFix" bindtap='temclickOwn' data-id="{{item.dataId}}"></image>
+					<view class="r" data-id='{{item.dataId}}'>
 						<view class="nick-name">{{item.name}} <text class="tag">{{item.title}}</text></view>
 						<view class="txt2">{{item.time}}</view>
+            <image src="/images/complain.png" class="dele" bindtap='complain' data-id="{{item.dataId}}"></image>
 					</view>
 				</view>
 				<view class="article" bindtap='clickDetail' data-id='{{item.dataId}}'>
@@ -93,23 +94,50 @@
             <scroll-view scroll-y="true" class="scoll-h" >
                 <view class="list3">
 			<view class="tips">3 Diverse topics everyday</view>
-      <view wx:for="{{topicData}}" wx:key="item">
-      <view class="item" bindtap='clickPut' data-id="{{item.id}}">
-				<view class="txt1">{{item.id+1}}.<text class="tag">{{item.title}}</text></view>
+     
+      
+			<image src="{{gIp+findImg}}"></image>
+			<view class="item" bindtap='clickPut' data-id="{{topicData.id}}">
+				<view class="txt1">1<text class="tag">噗</text></view>
 				<view class="txt2">
-					<text>{{item.content}}</text>
+					<text>呜啦啦啦</text>
 				</view>
 				<view class="person"></view>
 			</view>
        
       </view>
-			<image src='/images/topic.png'></image>
-			
-		</view>
+		
    
             </scroll-view>
         </swiper-item>
     </swiper>
 <tabbar tabbar="{{tabbar}}"></tabbar> 
 </view>
+<view class='toast-box' hidden='{{!ifName}}'>        
+<view class='toastbg'></view>        
+<view class='showToast'>            
+<view class='toast-title'>                
+<text>提示</text> 
+           
+</view>
+<view class='toast-title'>                
+<text>确定举报吗？</text> 
+           
+</view>             
+<view class='toast-main'>                
+<view class='toast-input'>                    
+<input placeholder='举报理由' bindinput='setValue' data-name='stuEidtName' style='border-radius: 0px; border-color: black; ' value='{{input}}'></input>                
+</view>            
+</view>            
+<view class='toast-button'>                
+<view class='button1'>                    
+<button catchtap='cancel'>取消</button>                
+</view>               
+ <view class='button2'>                    
+<button catchtap='confirm'>确定</button>                
+</view>            
+</view>        
+</view>    
+</view>
+
 
