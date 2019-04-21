@@ -26,6 +26,7 @@
     white-space: normal !important;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+     font-family:"Arial";
 }
 /* 为方便后续配合，请尽量不要修改此文件。 QQ: 215611388 */
 .container {

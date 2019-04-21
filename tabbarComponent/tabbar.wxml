@@ -6,7 +6,7 @@
       <text>{{item.text}}</text>
     </navigator>
     <navigator wx:else class="tabbar_nav" hover-class="none" url="{{item.pagePath}}" style="color:{{item.selected ? tabbar.selectedColor : tabbar.color}}" open-type="switchTab">
-      <image class="tabbar_icon" src="{{item.selected ? item.selectedIconPath : item.iconPath}}"></image>
+      <image class="special-wrapper" src="{{item.selected ? item.selectedIconPath : item.iconPath}}"></image>
       <text>{{item.text}}</text>
     </navigator>
   </block>

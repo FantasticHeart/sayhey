@@ -43,7 +43,8 @@
 .special-wrapper{
   position: absolute;
   left: 77rpx;
-  top: -36rpx;
+  top: 10rpx;
+  bottom:10rpx;
   width: 96rpx;
   height: 96rpx;
   border-radius: 50%;
