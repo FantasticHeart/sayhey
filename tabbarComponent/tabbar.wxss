@@ -7,7 +7,7 @@
     left: 0;
     z-index: 999;
     width: 100%;
-    height: 98rpx;
+    height: 118rpx;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
 }
 .tabbar_box.iphoneX-height{

@@ -21,13 +21,13 @@
 	</view>
 	<view class="list">
 		<view class="item">
-			<navigator class="arrow" url="">我的名片</navigator>
+			<navigator class="arrow" url="/pages/page13/index">我的名片</navigator>
 		</view>
 		<view class="item">
 			<navigator class="arrow" url="/pages/page10/index">我的收藏</navigator>
 		</view>
 		<view class="item">
-			<navigator class="arrow" url="">联系我们</navigator>
+			<navigator class="arrow" url="/pages/page14/index">联系我们</navigator>
 		</view>
 	</view>
   <tabbar tabbar="{{tabbar}}"></tabbar> 

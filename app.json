@@ -1,6 +1,6 @@
 {
-  "pages": [        
-    "pages/index/index",        
+  "pages": [
+    "pages/index/index",
     "pages/page01/index",
     "pages/page02/index",
     "pages/page03/index",
@@ -13,7 +13,9 @@
     "pages/page10/index",
     "pages/page11/index",
     "pages/page12/index",
-    "pages/list/index"
+    "pages/list/index",
+    "pages/page13/index",
+    "pages/page14/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -22,7 +24,7 @@
     "navigationBarTextStyle": "black",
     "enablePullDownRefresh": false
   },
-  "tabBar": {        
+  "tabBar": {
     "borderStyle": "black",
     "backgroundColor": "#fff",
     "color": "#868696",
