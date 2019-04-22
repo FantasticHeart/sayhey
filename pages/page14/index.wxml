@@ -1,3 +1,11 @@
-<!--pages/page14/index.wxml-->
-<text>pages/page14/index.wxml</text>
-<text>联系我们</text>
+
+
+<text class='txt1'>
+我们是来自武大，华科，川大的学生，我们相信：we are born to express ourselves.
+
+如果你认同我们所做的事，并且擅长开发/运营/英语，欢迎加入SayHey和我们一起成长。
+
+如果你有一些原创的精美照片想要展示，欢迎联系我们，可以加入我们的系统原创图库。
+
+详情请添加微信号咨询：zyh826899
+</text>
