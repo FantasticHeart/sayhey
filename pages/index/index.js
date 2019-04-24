@@ -33,10 +33,12 @@ Page({
                   title: '登录成功',
                   duration: 2000
                 })
+                
                 if (wx.getStorageSync('token')==''){   //token为空 需要重新存储 这里是指token过期 自动清空其值
                   wx.setStorageSync('token', res.data.token)
                 }
                 app.globalData.token = wx.getStorageSync('token');
+                console.log(app.globalData.token)
                 app.globalData.userId = res.data.user.userId;
               }
               else {
@@ -86,6 +88,7 @@ Page({
     })
   },
   onLoad: function () {
+    app.onLaunch();
     this.setData({
       gIp: app.globalData.globalIp
     })

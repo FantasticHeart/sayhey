@@ -4,7 +4,7 @@
 		<text class="tt">Title</text>
 		<input placeholder="输入标题..." class="input" value="{{titleareaValue}}" bindinput="btnInputTitle" placeholder-class="phColor"/>
 		<text class="number">{{titleNumber}}/15</text>
-		<button class="btn btn-red" bindtap="btnSubmit" hover-class="none" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">发布</button>
+		<button class="btn btn-red" bindtap="btnSubmit" hover-class="none">发布</button>
 	</view>
 	<view class="textarea-box">
 		<textarea class="textarea" value="{{textareaValue}}" placeholder="请描述你的语音..." placeholder-class="phColor" maxlength="500" auto-height bindlinechange="" bindinput="btnInputTextarea"/>

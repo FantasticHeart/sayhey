@@ -2,11 +2,10 @@
     <view class="list" wx:for="{{postData}}" wx:key="item">
    			<view class="g-cardItem">
 				<view class="userInfo">
-					<image src="{{item.avatar}}" class="face" mode="widthFix" bindtap='clickOwn'></image>
+					<image src="{{item.avatar}}" class="face" mode="widthFix" bindtap='clickOwn' data-id='{{item.dataId}}'></image>
 					<view class="r">
 						<view class="nick-name">{{item.name}} <text class="tag">{{item.title}}</text></view>
 						<view class="txt2">{{item.time}}</view>
-            <image src="/images/dele.png" class="dele" bindtap='delete' data-id="{{item.dataId}}"></image>
 					</view>
 				</view>
 				<view class="article" bindtap='clickDetail' data-id='{{item.dataId}}'>
@@ -30,9 +29,8 @@
 				<view class="btm-operate">
 					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix" bindtap="clickDetail" data-id='{{item.dataId}}'></image>{{item.comment}}</button>
 					<button class="item" bindtap="" hover-class="none"><image src="{{isred[item.dataId]?'/images/redhart.png':'/images/hart.png'}}" class="icon" bindtap="clickred" mode="widthFix" data-id='{{item.dataId}}'></image>{{item.upvoteNum}}</button>
+           <button class="item" bindtap="collect" hover-class="none" data-id='{{item.dataId}}'><image src="{{iscollected[item.dataId]?'/images/collect.png':'/images/collected.png'}}" class="icon" mode="widthFix"></image></button>
 				</view>
 			</view>
 		</view>
 </view>
-<text>pages/page10/index.wxml</text>
-<text>我的</text>

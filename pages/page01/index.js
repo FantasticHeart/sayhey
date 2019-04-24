@@ -5,6 +5,11 @@ const innerAudioContext = wx.createInnerAudioContext();       //播放器
 Page({
   // 页面的初始数据
   data: {
+    iscollected:[],
+    temiscollected: [],
+    isRepeatPlay:false,
+    iscomplain:[],
+    iscom:false,
     complainNum:0,
     input:'',
     ifName: false,
@@ -19,7 +24,9 @@ Page({
     limit:10,      //发现栏数据请求参数
     latestData: [],     //最新栏数据
     findImg:'',
-   // topicData: [],     //话题栏数据
+    topic: {},     //话题栏数据
+    repeat:{},
+    news:{},
     imgwidth: [],    //发现图片宽度
     imgheight: [],     //发现图片高度
     temimgwidth: [],    //最新图片宽度
@@ -29,9 +36,170 @@ Page({
     winHeight: "",//窗口高度
     isplay:false    //是否在播放
   },
+  cancelComplain:function(){
+    _this.data.iscomplain.fill(false);
+    _this.setData({
+      iscomplain: _this.data.iscomplain,
+      iscom:false
+    })
+  },
+  collect: function (e) {
+    var idx=e.currentTarget.dataset.id;
+    _this.data.iscollected[idx] = !_this.data.iscollected[idx];
+    _this.setData({
+      iscollected: _this.data.iscollected
+    })
+    if (_this.data.iscollected[idx]) {
+      wx.request({
+        url: app.globalData.globalIp + '/addStore',
+        method: 'post',
+        header: {
+          'content-type': 'application/x-www-form-urlencoded',
+          "Authorization": app.globalData.token
+        },
+        data: {
+          userId: app.globalData.userId,
+          postId: _this.data.userData[idx].postId
+        },
+        success: function (res) {
+          if (res.data.status == 'TOKEN_EXPIRED') {
+            wx.setStorageSync('token', '')
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
+            wx.showToast({
+              title: '授权过期',
+              icon: 'loading',
+              duration: 2000
+            })
+          }
+          console.log(res.data);
+        }
+      })
+    }
+    else {
+      wx.request({
+        url: app.globalData.globalIp + '/deleteStore',
+        method: 'post',
+        header: {
+          'content-type': 'application/x-www-form-urlencoded',
+          "Authorization": app.globalData.token
+        },
+        data: {
+          userId: app.globalData.userId,
+          postId: _this.data.userData[idx].postId
+        },
+        success: function (res) {
+          if (res.data.status == 'TOKEN_EXPIRED') {
+            wx.setStorageSync('token', '')
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
+            wx.showToast({
+              title: '授权过期',
+              icon: 'loading',
+              duration: 2000
+            })
+          }
+          console.log(res.data);
+        }
+      })
+    }
+  },
+  temcollect: function (e) {
+    var idx = e.currentTarget.dataset.id;
+    _this.data.temiscollected[idx] = !_this.data.temiscollected[idx];
+    _this.setData({
+      temiscollected: _this.data.temiscollected
+    })
+    if (_this.data.temiscollected[idx]) {
+      wx.request({
+        url: app.globalData.globalIp + '/addStore',
+        method: 'post',
+        header: {
+          'content-type': 'application/x-www-form-urlencoded',
+          "Authorization": app.globalData.token
+        },
+        data: {
+          userId: app.globalData.userId,
+          postId: _this.data.latestData[idx].postId
+        },
+        success: function (res) {
+          if (res.data.status == 'TOKEN_EXPIRED') {
+            wx.setStorageSync('token', '')
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
+            wx.showToast({
+              title: '授权过期',
+              icon: 'loading',
+              duration: 2000
+            })
+          }
+          console.log(res.data);
+        }
+      })
+    }
+    else {
+      wx.request({
+        url: app.globalData.globalIp + '/deleteStore',
+        method: 'post',
+        header: {
+          'content-type': 'application/x-www-form-urlencoded',
+          "Authorization": app.globalData.token
+        },
+        data: {
+          userId: app.globalData.userId,
+          postId: _this.data.latestData[idx].postId
+        },
+        success: function (res) {
+          if (res.data.status == 'TOKEN_EXPIRED') {
+            wx.setStorageSync('token', '')
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
+            wx.showToast({
+              title: '授权过期',
+              icon: 'loading',
+              duration: 2000
+            })
+          }
+          console.log(res.data);
+        }
+      })
+    }
+  },
+  repeatPlay:function(){
+    console.log(2)
+    _this.setData({
+      isRepeatPlay:!_this.data.isRepeatPlay
+    })
+    if(_this.data.isRepeatPlay){ 
+      innerAudioContext.src = _this.data.gIp + _this.data.repeat.audio; // 这里可以是录音的临时路径
+      innerAudioContext.play()
+      innerAudioContext.onEnded((res) => {
+        console.log('播放结束!');
+        _this.setData({
+          isRepeatPlay:false
+        })
+      })
+    }
+    else{
+      innerAudioContext.pause()
+    }
+    
+  },
   setValue:function(e){
     _this.setData({
       input: e.detail.value
+    })
+  },
+  representComplain: function (e) {
+    var idx=e.currentTarget.dataset.id;
+    _this.data.iscomplain[idx]=true
+    _this.setData({
+      iscomplain: _this.data.iscomplain,
+      iscom:true
     })
   },
   complain:function(e){
@@ -43,7 +211,12 @@ Page({
   cancel:function(){
     _this.setData({
       ifName:false,
-      input:''
+      input:'',
+      iscom: false
+    })
+    _this.data.iscomplain.fill(false);
+    _this.setData({
+      iscomplain: _this.data.iscomplain
     })
   },
   confirm:function(){
@@ -62,7 +235,12 @@ Page({
         console.log(res.data)
         _this.setData({
           ifName: false,
-          input: ''
+          input: '',
+          iscom: false
+        })
+        _this.data.iscomplain.fill(false);
+        _this.setData({
+          iscomplain: _this.data.iscomplain
         })
         wx.showToast({
           title: '举报成功',
@@ -81,6 +259,9 @@ Page({
       },
       success: function (res) {
         console.log(res.data)
+        _this.setData({
+          isRepeatPlay:false
+        })
         _this.data.userData = []       //数据处理 后面全是
         let temInfo = _this.data.userData;
         var tem = res.data.posts;
@@ -99,10 +280,17 @@ Page({
         _this.data.temimgheight.length = tem.length
         _this.data.isred.length = tem.length
         _this.data.isred.fill(false)
+        _this.data.iscollected.length = tem.length
+        _this.data.iscollected.fill(false)
         for (var i = 0; i < tem.length; i++) {
           for (var j = 0; j < tem[i].upvotes.length; j++) {
             if (tem[i].upvotes[j].user.userId == app.globalData.userId) {
               _this.data.isred[i] = true;
+            }
+          }
+          for (var j = 0; j < tem[i].stores.length; j++) {
+            if (tem[i].stores[j].userId == app.globalData.userId) {
+              _this.data.iscollected[i] = true;
             }
           }
           //  }
@@ -111,7 +299,8 @@ Page({
         }
         _this.setData({ 
           userData: temInfo,
-          isred: _this.data.isred
+          isred: _this.data.isred,
+          iscollected:_this.data.iscollected
           })
       }
     })
@@ -126,6 +315,9 @@ Page({
         offset: 0      //数据从哪条开始显示 因为是模仿朋友圈 所以一直都是从第一条数据显示 只需要更新limit即可
       },
       success: function (res) {
+        _this.setData({
+          isRepeatPlay: false
+        })
         _this.data.latestData = []       //数据处理 后面全是
         console.log(res.data)
         _this.data.latestData = [];
@@ -146,43 +338,51 @@ Page({
         _this.data.temimgheight.length = tem.length
           _this.data.temisred.length = tem.length
           _this.data.temisred.fill(false)
+        _this.data.temiscollected.length = tem.length
+        _this.data.temiscollected.fill(false)
+        _this.data.iscomplain.length = tem.length
+        _this.data.iscomplain.fill(false)
         for (var i = 0; i < tem.length; i++) {
           for (var j = 0; j < tem[i].upvotes.length; j++) {
               if (tem[i].upvotes[j].user.userId == app.globalData.userId) {
                 _this.data.temisred[i] = true;
               }
             }
+          for (var j = 0; j < tem[i].stores.length; j++) {
+            if (tem[i].stores[j].userId == app.globalData.userId) {
+              _this.data.temiscollected[i] = true;
+            }
+          }
         //  }
           var u = { 'dataId': i, 'name': tem[i].user.userName, 'time': tem[i].ctime, 'content': tem[i].postContent, 'audioTime': tem[i].audioLength, 'imgPath': tem[i].postImg, 'audioPath': tem[i].postAudio, 'postId': tem[i].postId, 'comment': tem[i].commentNum, 'upvoteNum': tem[i].upvoteNum, 'avatar': tem[i].user.avatar, 'title': tem[i].postTitle, 'userId': tem[i].user.userId };
           temInfo.push(u);
         }
         _this.setData({ 
           latestData: temInfo,
-          temisred: _this.data.temisred
+          temisred: _this.data.temisred,
+          temiscollected:_this.data.temiscollected
          })
       }
     })
   },
   rightRequest:function(){
     wx.request({
-      url: app.globalData.globalIp + '/getNewsToday',
+      url: app.globalData.globalIp + '/getRecovery',
       header: { "Content-Type": "application/x-www-form-urlencoded" },
       method: 'post',
       data: {
       },
       success: function (res) {
-        //_this.data.topicData = []
+        innerAudioContext.stop()
+        _this.setData({
+          isRepeatPlay: false
+        })
         console.log(res.data)
-        var tem = res.data.news;
-     /*   for (var i = 0; i < tem.length; i++) {
-          var t = { 'id': i, 'title': tem[i].title, 'content': tem[i].content,'imgPath':tem[i].img }
-          _this.data.topicData.push(t);
-        }
         _this.setData({
-          topicData: _this.data.topicData
-        })*/
-        _this.setData({
-          findImg: tem.img
+          findImg: res.data.activity.img,
+          repeat: res.data.repeat,
+          topic: res.data.topic,
+          news: res.data.news
         })
       }
     })
@@ -270,7 +470,7 @@ Page({
                   url: '/pages/index/index',
                 })
                 wx.showToast({
-                  title: '授权过期，请重新登录',
+                  title: '授权过期',
                   icon: 'loading',
                   duration: 2000
                 })
@@ -299,7 +499,7 @@ Page({
                   url: '/pages/index/index',
                 })
                 wx.showToast({
-                  title: '授权过期，请重新登录',
+                  title: '授权过期',
                   icon: 'loading',
                   duration: 2000
                 })
@@ -341,7 +541,7 @@ Page({
                   url: '/pages/index/index',
                 })
                 wx.showToast({
-                  title: '授权过期，请重新登录',
+                  title: '授权过期',
                   icon: 'loading',
                   duration: 2000
                 })
@@ -370,7 +570,7 @@ Page({
                   url: '/pages/index/index',
                 })
                 wx.showToast({
-                  title: '授权过期，请重新登录',
+                  title: '授权过期',
                   icon: 'loading',
                   duration: 2000
                 })
@@ -386,17 +586,28 @@ Page({
   },
   btnTabSwitch:(e)=>{        //点击切换事件
     var cur = e.target.dataset.current;
-    _this.setData({
-      currentTab: cur
-    })
-    if(cur==0){
+    if(_this.data.currentTab!=cur){
+      _this.setData({
+        currentTab: cur
+      })
+      _this.setData({
+        ifName: false,
+        input:'',
+        iscom: false
+      })
+      _this.data.iscomplain.fill(false);
+      _this.setData({
+        iscomplain: _this.data.iscomplain
+      })
+      if (cur == 0) {
         _this.leftRequest();
-    }
-    else if(cur==1){
-      _this.middleRequest();
-    }
-    else{
-      _this.rightRequest();
+      }
+      else if (cur == 1) {
+        _this.middleRequest();
+      }
+      else {
+        _this.rightRequest();
+      }
     }
   },
   tembtnOnePlay: (e) => {           //最新栏播放事件
@@ -514,16 +725,19 @@ Page({
       }
     })
   },
-  clickPut: function (e) {  //在话题栏点击话题进入发布动态页面
-    var idx=e.currentTarget.dataset.id;
-    _this.data.topicData.forEach((item,index)=>{
-      if(idx==index){
-        app.globalData.title = _this.data.topicData[idx].title;
-        app.globalData.content = _this.data.topicData[idx].content;
-        wx.navigateTo({
-          url: '/pages/page02/index',
-        })
-      }
+  topicClickPut: function (e) {  //在话题栏点击话题进入发布动态页面
+  app.globalData.title = _this.data.topic.topicTitle;
+  app.globalData.content = _this.data.topic.topicContent;
+  wx.navigateTo({
+    url: '/pages/page02/index',
+  })  
+  },
+  repeatClickPut: function (e) {  //在话题栏点击话题进入发布动态页面
+    console.log(1);
+    app.globalData.title = _this.data.repeat.title;
+    app.globalData.content = _this.data.repeat.content;
+    wx.navigateTo({
+      url: '/pages/page02/index',
     })
   },
   // 生命周期函数--监听页面初次渲染完成
@@ -544,7 +758,10 @@ Page({
     }
   },
   // 生命周期函数--监听页面隐藏
-  onHide: function () { },
+  onHide: function () {
+    innerAudioContext.stop();
+    
+   },
   // 生命周期函数--监听页面卸载
   onUnload: function () { },
   // 页面相关事件处理函数--监听用户下拉动作

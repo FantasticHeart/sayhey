@@ -24,11 +24,11 @@ Page({
     isupload:false,   //是否上传音频
     isplay:false   //是否在回放
 },
-  getPhoneNumber(e) {
+  /*getPhoneNumber(e) {
     console.log(e.detail.errMsg)
     console.log(e.detail.iv)
     console.log(e.detail.encryptedData)
-  },
+  },*/
 init:function(){
   _this.setData({
     titleareaValue: '',
@@ -81,14 +81,24 @@ submitRequest:function(){
           duration: 2000
         })
       }
-      wx.switchTab({
-        url: '/pages/page01/index',
-      })
-      wx.showToast({
-        title: "发布成功",
-        icon: "",//仅支持success或者loading
-        duration: 1000
-      });
+      if (res.data.msg =='请查看提交的内容是否包含中文，SayHey社区暂时不支持中文！'){
+        wx.showToast({
+          title: '发布内容有中文',
+          icon:'none',
+          duration:2000
+        })
+      }
+      else{
+        wx.switchTab({
+          url: '/pages/page01/index',
+        })
+        wx.showToast({
+          title: "发布成功",
+          icon: "",//仅支持success或者loading
+          duration: 1000
+        });
+      }
+      
 
     }
   })
@@ -184,7 +194,7 @@ btnVoice:(e)=>{       //录音
     wx.showToast({
       title: "录音不超60秒",
       icon: "loading",//仅支持success或者loading
-      duration: 4000
+      duration: 1000
     });
     recorderManager.start({
       format: 'mp3' // 如果录制acc类型音频则改成aac
@@ -223,7 +233,7 @@ upload:function(){   //上传音频
             url: '/pages/index/index',
           })
           wx.showToast({
-            title: '授权过期，请重新登录',
+            title: '授权过期',
             icon: 'loading',
             duration: 2000
           })
@@ -339,7 +349,7 @@ btnDelete:function(e){         //删除照片
                 url: '/pages/index/index',
               })
               wx.showToast({
-                title: '授权过期，请重新登录',
+                title: '授权过期',
                 icon: 'loading',
                 duration: 2000
               })

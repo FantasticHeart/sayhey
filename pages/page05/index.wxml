@@ -31,7 +31,6 @@
 			<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix"></image>{{userData.comments.length}}</button>
 			<button class="item" bindtap="clickred" hover-class="none"><image src="{{isred?'/images/redhart.png':'/images/hart.png'}}" class="icon" mode="widthFix"></image>{{userData.upvotes.length}}</button>
 			<button class="item" bindtap="collect" hover-class="none"><image src="{{iscollected?'/images/collect.png':'/images/collected.png'}}" class="icon" mode="widthFix"></image></button>
-			<button class="item" bindtap="forward" hover-class="none"><image src="/images/forward.png" class="icon" mode="widthFix"></image></button>
 		</view>
 	</view>
 
@@ -63,7 +62,8 @@
 			</view>
 			<view class="audio-box">
 				<text class="per" style="width:100%;" data-id='{{item.id}}' bindtap="play"></text>
-				<text class="time">{{item.audioLength}}'</text>
+				<text wx:if="{{commentPlay[item.id]}}" class="time">播放中...</text>
+				<text wx:else class="time">{{item.audioLength}}'</text>
 			</view>
 		</view>
 	</view>

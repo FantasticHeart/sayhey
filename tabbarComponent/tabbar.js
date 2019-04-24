@@ -16,19 +16,19 @@ Component({
             "pagePath": "/pages/page01/index",
             "iconPath": "icon/ft11.png",
             "selectedIconPath": "icon/ft12.png",
-  //          "text": "首页"
+            "text": "首页"
           },
           {
             "pagePath": "/pages/page02/index",
             "iconPath": "icon/ft2.png",
             "isSpecial": true,
-     //       "text": "发布"
+            "text": "发声"
           },
           {
             "pagePath": "/pages/page03/index",
             "iconPath": "icon/ft31.png",
             "selectedIconPath": "icon/ft32.png",
-       //     "text": "我的"
+            "text": "我的"
           }
         ]
       }

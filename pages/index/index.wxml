@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="container" style="background-image:url({{gIp+'/upload/img/background.png'}})">
+<view class="container" style="background-image:url({{gIp+'/upload/img/background.png?'+Math.random() / 9999}})" wx:if="{{gIp+'/upload/img/background.png?'+Math.random() / 9999}}">
   <view class="userinfo">
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" style='font-weight:bolder;font-size:50rpx;position:fixed;top:5%'> 获取个人信息 </button>
     <block wx:else>

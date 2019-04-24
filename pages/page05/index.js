@@ -6,6 +6,7 @@ let _this;
 Page({
   // 页面的初始数据
   data: {
+    commentPlay:[],
     type:'time',
     istime:true,
     isplay:false,
@@ -69,7 +70,9 @@ Page({
         console.log(res.data);
         var tem = res.data.comments;
         _this.data.Onefinger.length = tem.length;
-        _this.data.Onefinger.fill(false);;
+        _this.data.Onefinger.fill(false);
+        _this.data.commentPlay.length = tem.length;
+        _this.data.commentPlay.fill(false);
         for (var i = 0; i < tem.length; i++) {
           for (var j = 0; j < tem[i].upvotes.length; j++) {
             if (tem[i].upvotes[j].user.userId == app.globalData.userId) {
@@ -101,14 +104,32 @@ Page({
   play:function(e){
     var idx=e.currentTarget.dataset.id;
   //  const innerAudioContext = wx.createInnerAudioContext()
-    
+    _this.data.commentPlay[idx] = !_this.data.commentPlay[idx];
   //  innerAudioContext.src = _this.data.gIp+_this.data.commentData[idx].audioPath;
-    _this.setData({
-      onePlay:false
+    _this.data.commentPlay.forEach((item, index) => {
+      if(index!=idx){
+        _this.data.commentPlay[index]=false
+      }
     })
-    innerAudioContext.src = _this.data.gIp + _this.data.commentData[idx].audioPath; // 这里可以是录音的临时路径
-    console.log(innerAudioContext.src)
-    innerAudioContext.play()
+    _this.setData({
+      onePlay:false,
+      commentPlay: _this.data.commentPlay
+    })
+    if (_this.data.commentPlay[idx]){
+      innerAudioContext.src = _this.data.gIp + _this.data.commentData[idx].audioPath; // 这里可以是录音的临时路径
+      console.log(innerAudioContext.src)
+      innerAudioContext.play()
+      innerAudioContext.onEnded((res) => {
+        console.log('播放结束!');
+        _this.data.commentPlay[idx] = false
+        _this.setData({
+          commentPlay: _this.data.commentPlay
+        })
+      })
+    }
+    else{
+      innerAudioContext.pause()
+    }
   },
   collect:function(){
     _this.setData({
@@ -133,7 +154,7 @@ Page({
               url: '/pages/index/index',
             })
             wx.showToast({
-              title: '授权过期，请重新登录',
+              title: '授权过期',
               icon: 'loading',
               duration: 2000
             })
@@ -161,7 +182,7 @@ Page({
               url: '/pages/index/index',
             })
             wx.showToast({
-              title: '授权过期，请重新登录',
+              title: '授权过期',
               icon: 'loading',
               duration: 2000
             })
@@ -217,7 +238,7 @@ Page({
                   url: '/pages/index/index',
                 })
                 wx.showToast({
-                  title: '授权过期，请重新登录',
+                  title: '授权过期',
                   icon: 'loading',
                   duration: 2000
                 })
@@ -250,7 +271,7 @@ Page({
                   url: '/pages/index/index',
                 })
                 wx.showToast({
-                  title: '授权过期，请重新登录',
+                  title: '授权过期',
                   icon: 'loading',
                   duration: 2000
                 })
@@ -315,7 +336,7 @@ Page({
       wx.showToast({
         title: "语音不超60秒",
         icon: "loading",//仅支持success或者loading
-        duration: 4000
+        duration: 1000
       });
       recorderManager.start({
         format: 'mp3' // 如果录制acc类型音频则改成aac
@@ -361,7 +382,7 @@ Page({
             url: '/pages/index/index',
           })
           wx.showToast({
-            title: '授权过期，请重新登录',
+            title: '授权过期',
             icon: 'loading',
             duration: 2000
           })
@@ -392,7 +413,7 @@ Page({
                 url: '/pages/index/index',
               })
               wx.showToast({
-                title: '授权过期，请重新登录',
+                title: '授权过期',
                 icon: 'loading',
                 duration: 2000
               })
@@ -479,7 +500,7 @@ Page({
               url: '/pages/index/index',
             })
             wx.showToast({
-              title: '授权过期，请重新登录',
+              title: '授权过期',
               icon: 'loading',
               duration: 2000
             })
@@ -508,7 +529,7 @@ Page({
               url: '/pages/index/index',
             })
             wx.showToast({
-              title: '授权过期，请重新登录',
+              title: '授权过期',
               icon: 'loading',
               duration: 2000
             })
@@ -539,6 +560,20 @@ Page({
         _this.setData({
           userData: res.data.post
         })
+        _this.data.userData.upvotes.forEach((item, index) => {
+          if(item.user.userId==app.globalData.userId){
+            _this.setData({
+              isred:true
+            })
+          }
+        })
+        _this.data.userData.stores.forEach((item, index) => {
+          if (item.userId == app.globalData.userId) {
+            _this.setData({
+              iscollected: true
+            })
+          }
+        })
       }
     })
     _this.detailRequest();
@@ -566,7 +601,7 @@ Page({
             url: '/pages/index/index',
           })
           wx.showToast({
-            title: '授权过期，请重新登录',
+            title: '授权过期',
             icon: 'loading',
             duration: 2000
           })

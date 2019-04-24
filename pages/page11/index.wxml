@@ -50,6 +50,7 @@
 				<view class="btm-operate">
 					<button class="item" bindtap="" hover-class="none"><image src="/images/discuss.png" class="icon" mode="widthFix" bindtap="clickDetail" data-id='{{item.dataId}}'></image>{{item.comment}}</button>
 					<button class="item" bindtap="" hover-class="none"><image src="{{isred[item.dataId]?'/images/redhart.png':'/images/hart.png'}}" class="icon" bindtap="clickred" mode="widthFix" data-id='{{item.dataId}}'></image>{{item.upvoteNum}}</button>
+           <button class="item" bindtap="collect" hover-class="none" data-id='{{item.dataId}}'><image src="{{iscollected[item.dataId]?'/images/collect.png':'/images/collected.png'}}" class="icon" mode="widthFix"></image></button>
 				</view>
 			</view>
 		</view>

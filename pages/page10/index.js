@@ -4,12 +4,79 @@ let _this;
 Page({
   // 页面的初始数据
   data: {
+    iscollected:[],
     onePlay: [],
     isred: [],
     postData: [],
     gIp: '',
     imgwidth: [],
     imgheight: []
+  },
+  collect: function (e) {
+    var idx = e.currentTarget.dataset.id;
+    _this.data.iscollected[idx] = !_this.data.iscollected[idx];
+    _this.setData({
+      iscollected: _this.data.iscollected
+    })
+    if (_this.data.iscollected[idx]) {
+      wx.request({
+        url: app.globalData.globalIp + '/addStore',
+        method: 'post',
+        header: {
+          'content-type': 'application/x-www-form-urlencoded',
+          "Authorization": app.globalData.token
+        },
+        data: {
+          userId: app.globalData.userId,
+          postId: _this.data.postData[idx].postId
+        },
+        success: function (res) {
+          if (res.data.status == 'TOKEN_EXPIRED') {
+            wx.setStorageSync('token', '')
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
+            wx.showToast({
+              title: '授权过期',
+              icon: 'loading',
+              duration: 2000
+            })
+          }
+          _this.onShow();
+          console.log(res.data);
+        }
+      })
+    }
+    else {
+      wx.request({
+        url: app.globalData.globalIp + '/deleteStore',
+        method: 'post',
+        header: {
+          'content-type': 'application/x-www-form-urlencoded',
+          "Authorization": app.globalData.token
+        },
+        data: {
+          userId: app.globalData.userId,
+          postId: _this.data.postData[idx].postId
+        },
+        success: function (res) {
+          if (res.data.status == 'TOKEN_EXPIRED') {
+            wx.setStorageSync('token', '')
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
+            wx.showToast({
+              title: '授权过期',
+              icon: 'loading',
+              duration: 2000
+            })
+          }
+          _this.onShow();
+          console.log(res.data);
+        }
+      })
+    }
+    
   },
   imageLoad: function (e) {
     var idx = e.currentTarget.dataset.id;
@@ -55,7 +122,8 @@ Page({
 
   },
   clickOwn: function (e) {
-
+    var idx = e.currentTarget.dataset.id;
+    app.globalData.ofuserId = _this.data.postData[idx].userId;
     wx.navigateTo({
       url: '/pages/page07/index',
     })
@@ -98,7 +166,7 @@ Page({
                   url: '/pages/index/index',
                 })
                 wx.showToast({
-                  title: '授权过期，请重新登录',
+                  title: '授权过期',
                   icon: 'loading',
                   duration: 2000
                 })
@@ -127,7 +195,7 @@ Page({
                   url: '/pages/index/index',
                 })
                 wx.showToast({
-                  title: '授权过期，请重新登录',
+                  title: '授权过期',
                   icon: 'loading',
                   duration: 2000
                 })
@@ -194,6 +262,8 @@ Page({
         _this.data.onePlay.fill(false)
         _this.data.isred.length = tem.length
         _this.data.isred.fill(false)
+        _this.data.iscollected.length = tem.length
+        _this.data.iscollected.fill(false)
         _this.data.imgwidth.length = tem.length
         _this.data.imgwidth.fill(0)
         _this.data.imgheight.length = tem.length
@@ -205,13 +275,19 @@ Page({
               _this.data.isred[i] = true;
             }
           }
-          var p = { 'avatar': tem[i].user.avatar, 'dataId': i, 'name': tem[i].user.userName, 'title': tem[i].postTitle, 'time': tem[i].ctime, 'content': tem[i].postContent, 'imgPath': tem[i].postImg, 'audioTime': tem[i].audioLength, 'comment': tem[i].commentNum, 'upvoteNum': tem[i].upvoteNum, 'postId': tem[i].postId, 'audioPath': tem[i].postAudio };
+          for (var j = 0; j < tem[i].stores.length; j++) {
+            if (tem[i].stores[j].userId == app.globalData.userId) {
+              _this.data.iscollected[i] = true;
+            }
+          }
+          var p = { 'userId':tem[i].user.userId, 'avatar': tem[i].user.avatar, 'dataId': i, 'name': tem[i].user.userName, 'title': tem[i].postTitle, 'time': tem[i].ctime, 'content': tem[i].postContent, 'imgPath': tem[i].postImg, 'audioTime': tem[i].audioLength, 'comment': tem[i].commentNum, 'upvoteNum': tem[i].upvoteNum, 'postId': tem[i].postId, 'audioPath': tem[i].postAudio };
           _this.data.postData.push(p);
         }
         _this.setData({
           postData: _this.data.postData,
           onePlay: _this.data.onePlay,
-          isred: _this.data.isred
+          isred: _this.data.isred,
+          iscollected: _this.data.iscollected
         })
 
 
